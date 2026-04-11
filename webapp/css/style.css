@@ -1,0 +1,1524 @@
+@charset "UTF-8";
+
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+/* ===== TOP LEFT LOGO ===== */
+/* ===== TOP LEFT LOGO (IMPROVED) ===== */
+/* ===== FIXED LOGO (FORCE OVERRIDE) ===== */
+.brand-fixed {
+    position: fixed !important;
+    top: 30px !important;
+    left: 40px !important;
+    z-index: 9999 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+
+    color: #ffffff !important;
+}
+
+.brand-fixed img {
+    width: 60px !important;
+    height: 60px !important;
+
+    border-radius: 14px !important;
+
+    /* Remove box feel completely */
+    background: none !important;
+    padding: 0 !important;
+
+    /* Add clean shadow instead */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.35) !important;
+}
+
+.brand-fixed span {
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.6px !important;
+
+    text-shadow: 0 4px 12px rgba(0,0,0,0.6) !important;
+}
+
+/* ===================================================== */
+/* 🔥 AUTH PAGES (LOGIN + REGISTER) */
+/* ===================================================== */
+
+body.auth-split-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f172a, #1e3a8a, #6d28d9);
+}
+
+/* ===== LOGO ===== */
+.brand-fixed {
+    position: fixed;
+    top: 20px;
+    left: 25px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+}
+
+.brand-fixed img {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.2);
+    padding: 5px;
+}
+
+.brand-fixed span {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* ===== LAYOUT ===== */
+.auth-split-layout {
+    display: flex;
+    height: 100vh;
+}
+
+/* ===== LEFT PANEL ===== */
+.auth-left-panel {
+    width: 50%;
+    height: 100vh;
+    position: relative;
+    background: url("../images/background.jpg") center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-left-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(15, 23, 42, 0.85),
+        rgba(109, 40, 217, 0.6)
+    );
+}
+
+.auth-left-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    padding: 40px;
+}
+
+.auth-left-content h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.auth-left-content p {
+    font-size: 18px;
+    opacity: 0.9;
+}
+
+/* ===== RIGHT PANEL ===== */
+.auth-right-panel {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* ===== CARD ===== */
+.auth-login-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 35px;
+    border-radius: 16px;
+    background: rgba(241, 240, 234, 0.08);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+    animation: fadeUp 0.6s ease;
+}
+
+/* Register page support */
+label {
+    display: block;
+    display: block;
+}
+
+input {
+    width: 100%;
+.container-top {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+}
+
+.create-user-card {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stats-container {
+    width: 60%;
+    display: flex;
+    gap: 16px;
+    height: 100%;
+}
+
+.users-toolbar {
+    margin-top: 20px;
+}
+
+.users-table-card {
+    width: 100%;
+    margin-top: 20px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2A3B57;
+    box-shadow: none;
+}
+
+/* ===== BUTTON ===== */
+button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    font-size: 16px;
+    color: white;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(22,163,74,0.4);
+}
+
+/* ===== LINKS ===== */
+.link-container {
+    text-align: center;
+    margin-top: 18px;
+}
+
+.link-container a {
+    color: #0B1A3A;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link-container a:hover {
+    text-decoration: underline;
+}
+
+/* ===== ERROR ===== */
+.error-message {
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* ===== LOGIN MODAL PAGE ===== */
+body.auth-modal-page {
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(rgba(7, 16, 38, 0.68), rgba(18, 27, 63, 0.76)),
+        url("../images/background.jpg") center/cover no-repeat;
+}
+
+.auth-modal-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+}
+
+.login-modal {
+    width: min(800px, 100%);
+    min-height: 450px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    animation: fadeUp 0.5s ease;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    border: none;
+    background: transparent;
+    color: #9ca3af;
+    font-size: 22px;
+    line-height: 1;
+    cursor: default;
+}
+
+.login-modal-left,
+.login-modal-right {
+    width: 50%;
+}
+
+.login-modal-left {
+    position: relative;
+    background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.9)),
+        url("../images/background.jpg") center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login-modal-left::after {
+    content: none;
+}
+
+.login-modal-left-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-20px);
+    text-align: center;
+    padding: 24px;
+    overflow: hidden;
+}
+
+.hero-line {
+    color: #ffffff;
+    font-size: 26px;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.line1 {
+    animation: fadeInUp 0.6s ease forwards;
+    animation-delay: 0.2s;
+}
+
+.line2 {
+    animation: fadeInUp 0.6s ease forwards;
+    animation-delay: 0.6s;
+}
+
+.login-laptop-image {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    object-fit: contain;
+    opacity: 0.85;
+    filter: brightness(0.75) contrast(1.05)
+            drop-shadow(0 10px 20px rgba(0, 0, 0, 0.35));
+}/* Final hard kill: no heading effects on auth modal titles */
+.auth-modal-page .login-modal-right .login-title,
+.auth-modal-page .login-modal-right h2 {
+    text-shadow: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+.auth-modal-page .login-modal-right .login-title::before,
+.auth-modal-page .login-modal-right .login-title::after,
+.auth-modal-page .login-modal-right h2::before,
+.auth-modal-page .login-modal-right h2::after {
+    content: none !important;
+    display: none !important;
+    background: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+}
+
+
+/* Remove any decorative pseudo-elements that can create heading glow effects */
+.register-card h2::before,
+.register-card h2::after,
+.login-title::before,
+.login-title::after,
+.login-modal-right h2::before,
+.login-modal-right h2::after {
+    content: none !important;
+    background: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+    display: none !important;
+}
+.login-modal-right {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #FFFCEB; /* fully solid */
+    position: relative;
+    z-index: 2;
+}
+
+
+
+.login-title {
+    text-align: center;
+    font-size: 24px;
+    letter-spacing: 0.8px;
+    margin-bottom: 20px;
+    color: #2A3B57;
+}
+
+body.auth-modal-page .form-group {
+    margin-bottom: 14px;
+}
+
+body.auth-modal-page input {
+    border-radius: 8px;
+    padding: 12px 14px; 
+    border: 1px solid #d1d5db;
+
+    font-size: 16px;    
+}
+
+body.auth-modal-page input::placeholder {
+    font-size: 14px;
+    color: #9ca3af;
+}
+body.auth-modal-page input:focus {
+    border-color: #5b6df6;
+    box-shadow: 0 0 0 3px rgba(91, 109, 246, 0.22);
+}
+
+.login-submit-btn {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #26364F, #2A3B57);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-submit-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+
+    background: linear-gradient(135deg, #0A1733, #0B1A3A);
+
+    box-shadow: 
+        0 8px 20px rgba(10, 23, 51, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+body.auth-modal-page .link-container {
+    margin-top: 16px;
+    font-size: 14px;
+}
+
+body.auth-modal-page .error-message {
+    margin-bottom: 14px;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-line {
+        font-size: 22px;
+    }
+}
+
+/* ===================================================== */
+/* 📊 DASHBOARD */
+/* ===================================================== */
+
+/* ===== SAAS DASHBOARD LAYOUT ===== */
+.saas-shell {
+    min-height: 100vh;
+    background: #f9fafb;
+}
+
+.saas-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 70px;
+    height: 100vh;
+    background: #111827;
+    color: #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    padding: 14px 10px;
+    transition: width 0.3s ease;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.saas-sidebar:hover {
+    width: 220px;
+}
+
+.saas-logo {
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.saas-logo-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #3b82f6;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.saas-logo-text {
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    opacity: 0;
+    width: 0;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+}
+
+.saas-sidebar:hover .saas-logo {
+    justify-content: flex-start;
+    padding-left: 2px;
+}
+
+.saas-sidebar:hover .saas-logo-text {
+    opacity: 1;
+    width: auto;
+}
+
+.saas-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.saas-nav-item {
+    border: none;
+    text-decoration: none;
+    background: transparent;
+    color: #cbd5e1;
+    border-radius: 10px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
+}
+
+.saas-nav-icon {
+    width: 24px;
+    text-align: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.saas-nav-label {
+    white-space: nowrap;
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    text-align: left;
+    transition: opacity 0.2s ease;
+}
+
+.saas-sidebar:hover .saas-nav-item {
+    justify-content: flex-start;
+    padding-left: 12px;
+}
+
+.saas-sidebar:hover .saas-nav-label {
+    opacity: 1;
+    width: auto;
+}
+
+.saas-nav-item:hover,
+.saas-nav-item.active {
+    background: rgba(59, 130, 246, 0.2);
+    color: #ffffff;
+}
+
+.saas-logout-form {
+    margin-top: auto;
+}
+
+.saas-logout-btn {
+    font: inherit;
+}
+
+.saas-main {
+    margin-left: 70px;
+    padding: 24px;
+    transition: margin-left 0.3s ease;
+}
+
+.saas-sidebar:hover ~ .saas-main {
+    margin-left: 220px;
+}
+
+.saas-topbar {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.saas-date {
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 3px;
+}
+
+.saas-topbar h1 {
+    color: #111827;
+    font-size: 26px;
+    line-height: 1.2;
+}
+
+.saas-profile-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    padding: 6px 10px 6px 6px;
+}
+
+.saas-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #3b82f6;
+    color: #ffffff;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.saas-profile-meta {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.saas-profile-meta strong {
+    color: #111827;
+    font-size: 13px;
+}
+
+.saas-profile-meta span,
+.saas-dropdown {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.saas-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.saas-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+    padding: 18px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.saas-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 28px rgba(15, 23, 42, 0.1);
+}
+
+.saas-card-title {
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.saas-card h3 {
+    color: #111827;
+    font-size: 28px;
+    margin-bottom: 2px;
+}
+
+.saas-card-hint {
+    color: #475569;
+    font-size: 12px;
+}
+
+.saas-content-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.saas-panel {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+}
+
+.saas-panel h3 {
+    color: #111827;
+    margin-bottom: 10px;
+}
+
+.manage-users-card {
+    max-width: 720px;
+}
+
+.create-user-card {
+    max-width: 1100px;
+    margin: 0;
+}
+
+.users-table-card {
+    width: 100%;
+}
+
+.manage-users-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.stat-card {
+    padding: 16px 18px;
+}
+
+.stat-label {
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.stat-value {
+    color: #0f172a;
+    font-size: 24px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+    min-width: 0;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.users-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+}
+
+.users-search-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex: 1;
+    max-width: 520px;
+}
+
+.users-role-filter {
+    border: 1px solid #dbe3ee;
+    border-radius: 10px;
+    padding: 10px 12px;
+    background: #ffffff;
+    color: #111827;
+}
+
+.users-search-input {
+    border: 1px solid #dbe3ee;
+    border-radius: 10px;
+    padding: 10px 12px;
+    background: #ffffff;
+}
+
+.users-search-btn {
+    width: auto;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #26364f;
+    color: #ffffff;
+}
+
+.member-count {
+    font-size: 13px;
+    color: #475569;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    padding: 6px 10px;
+}
+
+.team-empty-state {
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    padding: 22px;
+    text-align: center;
+    color: #64748b;
+    background: #f8fafc;
+}
+
+.empty-title {
+    color: #0f172a;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.empty-subtitle {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.team-table-wrap {
+    overflow-x: auto;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.users-table th {
+    text-align: left;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 600;
+    padding-bottom: 10px;
+    position: sticky;
+    top: 0;
+    background: #ffffff;
+    z-index: 1;
+}
+
+.users-table td {
+    padding: 12px 0;
+    border-top: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.user-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #1f2937;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.users-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.inline-edit-form {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.inline-name-input {
+    max-width: 360px;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.action-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    width: auto;
+}
+
+.action-btn.edit {
+    color: #3b82f6;
+}
+
+.action-btn.delete {
+    color: #ef4444;
+}
+
+.action-btn:hover {
+    background: #f3f4f6;
+}
+
+.saas-form-help {
+    color: #475569;
+    margin-bottom: 14px;
+    font-size: 14px;
+}
+
+.saas-form-grid .form-group {
+    margin-bottom: 14px;
+}
+
+.saas-form-grid .login-submit-btn {
+    margin-top: 4px;
+}
+
+.success-message {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.saas-list {
+    padding-left: 18px;
+    color: #374151;
+    line-height: 1.65;
+}
+
+.profile-details {
+    margin-bottom: 12px;
+}
+
+.saas-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.saas-info-row:last-child {
+    border-bottom: none;
+}
+
+.saas-info-row span {
+    color: #64748b;
+}
+
+.saas-info-row strong {
+    color: #111827;
+}
+
+.crm-dashboard-shell {
+    min-height: 100vh;
+    background: #f3f6fb;
+    display: flex;
+}
+
+.crm-sidebar {
+    width: 250px;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.crm-sidebar-brand {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    padding: 6px 10px;
+}
+
+.crm-sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.crm-sidebar-menu a {
+    color: #cbd5e1;
+    text-decoration: none;
+    padding: 10px 12px;
+    border-radius: 8px;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.crm-sidebar-menu a:hover,
+.crm-sidebar-menu a.active {
+    background: rgba(59, 130, 246, 0.18);
+    color: #ffffff;
+}
+
+.crm-sidebar-logout-form {
+    margin-top: auto;
+}
+
+.sidebar-logout-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    cursor: pointer;
+}
+
+.sidebar-logout-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(220, 38, 38, 0.3);
+}
+
+.crm-main-content {
+    flex: 1;
+    padding: 30px;
+}
+
+.crm-main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.crm-main-header h1 {
+    font-size: 28px;
+    color: #0f172a;
+}
+
+.role-badge {
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.role-user {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.role-admin {
+    background: #ede9fe;
+    color: #5b21b6;
+}
+
+.crm-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.crm-stat-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e5e7eb;
+}
+
+.crm-stat-card h3 {
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.crm-stat-card p {
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.crm-profile-panel {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 22px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+}
+
+.crm-profile-panel h3 {
+    margin-bottom: 12px;
+    color: #0f172a;
+}
+
+.crm-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.crm-info-row:last-child {
+    border-bottom: none;
+}
+
+.crm-info-row span {
+    color: #64748b;
+}
+
+.crm-info-row strong {
+    color: #0f172a;
+}
+
+.dashboard-container {
+    min-height: 100vh;
+    background: #f9fafb;
+}
+
+.header {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+}
+
+.logout-link {
+    background: #ef4444;
+    padding: 10px 18px;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+/* ===================================================== */
+/* 📱 RESPONSIVE */
+/* ===================================================== */
+
+@media (max-width: 768px) {
+    .saas-sidebar,
+    .saas-sidebar:hover {
+        width: 70px;
+    }
+
+    .saas-main,
+    .saas-sidebar:hover ~ .saas-main {
+        margin-left: 70px;
+        padding: 16px;
+    }
+
+    .saas-content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .create-user-card {
+        width: 100%;
+    }
+
+    .users-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .users-search-form {
+        max-width: 100%;
+    }
+
+    .saas-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .saas-topbar h1 {
+        font-size: 22px;
+    }
+
+    .saas-profile-chip {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .crm-dashboard-shell {
+        flex-direction: column;
+    }
+
+    .crm-sidebar {
+        width: 100%;
+    }
+
+    .crm-main-content {
+        padding: 22px 18px;
+    }
+
+    .crm-main-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .login-modal {
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .login-modal-left,
+    .login-modal-right {
+        width: 100%;
+    }
+
+    .login-modal-left {
+        min-height: 220px;
+    }
+
+    .login-modal-right {
+        padding: 28px 24px;
+    }
+
+    .modal-close {
+        color: #d1d5db;
+    }
+
+    .auth-split-layout {
+        flex-direction: column;
+    }
+
+    .auth-left-panel,
+    .auth-right-panel {
+        width: 100%;
+    }
+
+    .auth-left-panel {
+        height: 35vh;
+    }
+
+    .auth-left-content h1 {
+        font-size: 30px;
+    }
+
+    .auth-login-card {
+        margin: 20px;
+        
+    }
+}
+
+@media (max-width: 900px) {
+    .container-top {
+        flex-direction: column;
+    }
+
+    .create-user-card,
+    .stats-container {
+        width: 100%;
+    }
+}
+
+/* ===== DASHBOARD V2: DARK TOPBAR + COLLAPSIBLE SIDEBAR ===== */
+.saas-shell {
+    min-height: 100vh;
+    background: #f9fafb;
+}
+
+.saas-topnav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: #2B2B2B;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    gap: 12px;
+}
+
+.saas-topnav-left {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    min-width: 120px;
+}
+
+.saas-topnav-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.saas-search {
+    width: min(460px, 100%);
+    height: 38px;
+    border-radius: 10px;
+    border: 1px solid #4b5563;
+    background: #1f1f1f;
+    color: #e5e7eb;
+    padding: 0 12px;
+}
+
+.saas-search::placeholder {
+    color: #9ca3af;
+}
+
+.saas-search:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.saas-topnav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.saas-topnav-icon {
+    color: #e5e7eb;
+    font-size: 19px;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.saas-topnav-icon:hover {
+    background: #3A3A3A;
+}
+
+.saas-profile-topnav {
+    background: #3A3A3A;
+    border: 1px solid #4b5563;
+    color: #f3f4f6;
+}
+
+.saas-profile-topnav .saas-profile-meta strong,
+.saas-profile-topnav .saas-profile-meta span,
+.saas-profile-topnav .saas-dropdown {
+    color: #f3f4f6;
+}
+
+.saas-sidebar {
+    top: 60px;
+    height: calc(100vh - 60px);
+    width: 80px;
+    background: #2B2B2B;
+    transition: width 0.3s ease;
+    z-index: 1100;
+}
+
+.saas-sidebar:hover {
+    width: 220px;
+}
+
+.saas-nav-item {
+    color: #e5e7eb;
+}
+
+.saas-nav-item:hover,
+.saas-nav-item.active {
+    background: #3A3A3A;
+    color: #ffffff;
+}
+
+.saas-nav-item.active {
+    box-shadow: inset 3px 0 0 #3b82f6;
+}
+
+.saas-main {
+    margin-top: 60px;
+    margin-left: 80px;
+    min-height: calc(100vh - 60px);
+    background: #f9fafb;
+    transition: margin-left 0.3s ease;
+}
+
+.saas-sidebar:hover ~ .saas-main {
+    margin-left: 220px;
+}
+
+.saas-welcome-block {
+    margin-bottom: 16px;
+}
+
+.saas-welcome-block h1 {
+    color: #111827;
+    font-size: 30px;
+    line-height: 1.2;
+}
+
+.saas-card {
+    background: #ffffff;
+}
+
+.saas-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 28px rgba(15, 23, 42, 0.1);
+}
+
+@media (max-width: 900px) {
+    .saas-topnav-center {
+        display: none;
+    }
+
+    .saas-profile-topnav .saas-profile-meta,
+    .saas-profile-topnav .saas-dropdown {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .saas-sidebar,
+    .saas-sidebar:hover {
+        width: 80px;
+    }
+
+    .saas-main,
+    .saas-sidebar:hover ~ .saas-main {
+        margin-left: 80px;
+        margin-top: 60px;
+        padding: 16px;
+    }
+
+    .saas-logo-text,
+    .saas-nav-label {
+        display: none;
+    }
+
+    .saas-content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Slight icon size boost for collapsed and expanded sidebar visibility */
+.saas-nav-icon {
+    width: 28px;
+    font-size: 20px;
+}
+
+.saas-nav-item {
+    min-height: 48px;
+}
+/* ===== REMOVE BROWSER AUTOFILL GLOW ===== */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px rgba(255, 252, 235, 0.9) inset !important;
+    box-shadow: 0 0 0 1000px rgba(255, 252, 235, 0.9) inset !important;
+
+    -webkit-text-fill-color: #111827 !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+}
