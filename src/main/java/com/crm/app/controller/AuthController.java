@@ -8,30 +8,54 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet("/auth")
+@WebServlet({"/login", "/register", "/logout", "/change-password"})
 public class AuthController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    
-    private UserDao userDao = new UserDao();
+
+    private static final String LOGIN_VIEW = "/view/auth/login.jsp";
+    private static final String REGISTER_VIEW = "/view/auth/register.jsp";
+    private static final String CHANGE_PASSWORD_VIEW = "/view/auth/change-password.jsp";
+
+    private final UserDao userDao = new UserDao();
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String path = request.getServletPath();
+
+        if ("/login".equals(path)) {
+            request.getRequestDispatcher(LOGIN_VIEW).forward(request, response);
+        } else if ("/register".equals(path)) {
+            request.getRequestDispatcher(REGISTER_VIEW).forward(request, response);
+        } else if ("/logout".equals(path)) {
+            handleLogout(request, response);
+        } else if ("/change-password".equals(path)) {
+            request.getRequestDispatcher(CHANGE_PASSWORD_VIEW).forward(request, response);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/login");
+        }
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String action = request.getParameter("action");
-        
-        if ("login".equals(action)) {
+
+        String path = request.getServletPath();
+
+        if ("/login".equals(path)) {
             handleLogin(request, response);
-        } else if ("register".equals(action)) {
+        } else if ("/register".equals(path)) {
             handleRegister(request, response);
-        } else if ("changePassword".equals(action)) {
+        } else if ("/change-password".equals(path)) {
             handleChangePassword(request, response);
         } else {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
         }
     }
 
@@ -47,13 +71,13 @@ public class AuthController extends HttpServlet {
         // Validate input - check if email or password is empty
         if (email == null || email.trim().isEmpty()) {
             request.setAttribute("error", "Email is required");
-            request.getRequestDispatcher("/view/auth/login.jsp").forward(request, response);
+            request.getRequestDispatcher(LOGIN_VIEW).forward(request, response);
             return;
         }
         
         if (password == null || password.trim().isEmpty()) {
             request.setAttribute("error", "Password is required");
-            request.getRequestDispatcher("/view/auth/login.jsp").forward(request, response);
+            request.getRequestDispatcher(LOGIN_VIEW).forward(request, response);
             return;
         }
         
@@ -69,7 +93,7 @@ public class AuthController extends HttpServlet {
             
             // Enforce password reset for first login before allowing dashboard access.
             if (user.isFirstLogin()) {
-                response.sendRedirect(request.getContextPath() + "/view/auth/change-password.jsp");
+                response.sendRedirect(request.getContextPath() + "/change-password");
                 return;
             }
 
@@ -81,7 +105,7 @@ public class AuthController extends HttpServlet {
         } else {
             // Invalid credentials - email not found or password incorrect
             request.setAttribute("error", "Invalid email or password");
-            request.getRequestDispatcher("/view/auth/login.jsp").forward(request, response);
+            request.getRequestDispatcher(LOGIN_VIEW).forward(request, response);
         }
     }
 
@@ -99,25 +123,25 @@ public class AuthController extends HttpServlet {
         // Validate input - check each field
         if (name == null || name.trim().isEmpty()) {
             request.setAttribute("error", "Full name is required");
-            request.getRequestDispatcher("/view/auth/register.jsp").forward(request, response);
+            request.getRequestDispatcher(REGISTER_VIEW).forward(request, response);
             return;
         }
         
         if (email == null || email.trim().isEmpty()) {
             request.setAttribute("error", "Email is required");
-            request.getRequestDispatcher("/view/auth/register.jsp").forward(request, response);
+            request.getRequestDispatcher(REGISTER_VIEW).forward(request, response);
             return;
         }
         
         if (password == null || password.trim().isEmpty()) {
             request.setAttribute("error", "Password is required");
-            request.getRequestDispatcher("/view/auth/register.jsp").forward(request, response);
+            request.getRequestDispatcher(REGISTER_VIEW).forward(request, response);
             return;
         }
 
         if (companyName == null || companyName.trim().isEmpty()) {
             request.setAttribute("error", "Company name is required");
-            request.getRequestDispatcher("/view/auth/register.jsp").forward(request, response);
+            request.getRequestDispatcher(REGISTER_VIEW).forward(request, response);
             return;
         }
         
@@ -130,11 +154,11 @@ public class AuthController extends HttpServlet {
         if (isRegistered) {
             // Registration successful - redirect to login page
             request.setAttribute("success", "Registration successful! Please login with your credentials.");
-            request.getRequestDispatcher("/view/auth/login.jsp").forward(request, response);
+            request.getRequestDispatcher(LOGIN_VIEW).forward(request, response);
         } else {
             // Registration failed - likely email already exists
             request.setAttribute("error", "Registration failed. Email may already exist or invalid format.");
-            request.getRequestDispatcher("/view/auth/register.jsp").forward(request, response);
+            request.getRequestDispatcher(REGISTER_VIEW).forward(request, response);
         }
     }
 
@@ -143,13 +167,13 @@ public class AuthController extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         if (session == null) {
-            response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
         User sessionUser = (User) session.getAttribute("user");
         if (sessionUser == null) {
-            response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
@@ -158,25 +182,25 @@ public class AuthController extends HttpServlet {
 
         if (newPassword == null || newPassword.trim().isEmpty()) {
             request.setAttribute("error", "New password is required");
-            request.getRequestDispatcher("/view/auth/change-password.jsp").forward(request, response);
+            request.getRequestDispatcher(CHANGE_PASSWORD_VIEW).forward(request, response);
             return;
         }
 
         if (confirmPassword == null || confirmPassword.trim().isEmpty()) {
             request.setAttribute("error", "Confirm password is required");
-            request.getRequestDispatcher("/view/auth/change-password.jsp").forward(request, response);
+            request.getRequestDispatcher(CHANGE_PASSWORD_VIEW).forward(request, response);
             return;
         }
 
         if (!newPassword.equals(confirmPassword)) {
             request.setAttribute("error", "Passwords do not match");
-            request.getRequestDispatcher("/view/auth/change-password.jsp").forward(request, response);
+            request.getRequestDispatcher(CHANGE_PASSWORD_VIEW).forward(request, response);
             return;
         }
 
         if (newPassword.length() < 8) {
             request.setAttribute("error", "Password must be at least 8 characters long");
-            request.getRequestDispatcher("/view/auth/change-password.jsp").forward(request, response);
+            request.getRequestDispatcher(CHANGE_PASSWORD_VIEW).forward(request, response);
             return;
         }
 
@@ -185,7 +209,7 @@ public class AuthController extends HttpServlet {
 
         if (!updated) {
             request.setAttribute("error", "Failed to update password. Please try again.");
-            request.getRequestDispatcher("/view/auth/change-password.jsp").forward(request, response);
+            request.getRequestDispatcher(CHANGE_PASSWORD_VIEW).forward(request, response);
             return;
         }
 
@@ -197,5 +221,22 @@ public class AuthController extends HttpServlet {
         } else {
             response.sendRedirect(request.getContextPath() + "/view/dashboard/home.jsp");
         }
+    }
+
+    /**
+     * Handle logout from GET requests by destroying session and removing auth cookie.
+     */
+    private void handleLogout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        Cookie userCookie = new Cookie("user_id", "");
+        userCookie.setMaxAge(0);
+        userCookie.setPath(request.getContextPath().isEmpty() ? "/" : request.getContextPath());
+        response.addCookie(userCookie);
+
+        response.sendRedirect(request.getContextPath() + "/login");
     }
 }

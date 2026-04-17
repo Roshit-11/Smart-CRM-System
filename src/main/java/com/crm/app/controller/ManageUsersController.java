@@ -27,8 +27,11 @@ import java.util.UUID;
 @WebServlet("/manage-users")
 public class ManageUsersController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static final String FROM_EMAIL = "noreply.meetingai@gmail.com";
-    private static final String APP_PASSWORD = ""; // Add Gmail app password here.
+    private static final String DEFAULT_FROM_EMAIL = "noreply.meetingai@gmail.com";
+    private static final String ENV_MAIL_FROM = "SMARTCRM_MAIL_FROM";
+    private static final String ENV_MAIL_APP_PASSWORD = "SMARTCRM_MAIL_APP_PASSWORD";
+    private static final String PROP_MAIL_FROM = "smartcrm.mail.from";
+    private static final String PROP_MAIL_APP_PASSWORD = "smartcrm.mail.app.password";
 
     private final UserDao userDao = new UserDao();
 
@@ -97,6 +100,7 @@ public class ManageUsersController extends HttpServlet {
                 sendEmail(email.trim(), generatedPassword);
                 request.setAttribute("success", "User created successfully and credentials emailed to " + email.trim() + ".");
             } catch (MessagingException e) {
+                getServletContext().log("Email delivery failed for user: " + email, e);
                 request.setAttribute("error", "User created, but email delivery failed. Share this temporary password manually: " + generatedPassword);
             }
         } else {
@@ -279,21 +283,35 @@ public class ManageUsersController extends HttpServlet {
     }
 
     private void sendEmail(String toEmail, String generatedPassword) throws MessagingException {
+        String fromEmail = getConfigValue(ENV_MAIL_FROM, PROP_MAIL_FROM, DEFAULT_FROM_EMAIL);
+        String appPassword = getConfigValue(ENV_MAIL_APP_PASSWORD, PROP_MAIL_APP_PASSWORD, "");
+        if (appPassword.trim().isEmpty()) {
+            throw new MessagingException(
+                    "Mail app password is not configured. Set env " + ENV_MAIL_APP_PASSWORD
+                            + " or JVM property " + PROP_MAIL_APP_PASSWORD + "."
+            );
+        }
+
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.starttls.required", "true");
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        props.put("mail.smtp.connectiontimeout", "10000");
+        props.put("mail.smtp.timeout", "10000");
+        props.put("mail.smtp.writetimeout", "10000");
 
         Session mailSession = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(FROM_EMAIL, APP_PASSWORD);
+                return new PasswordAuthentication(fromEmail, appPassword);
             }
         });
 
         Message message = new MimeMessage(mailSession);
-        message.setFrom(new InternetAddress(FROM_EMAIL));
+        message.setFrom(new InternetAddress(fromEmail));
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
         message.setSubject("SmartCRM Account Created");
         message.setText(
@@ -306,5 +324,19 @@ public class ManageUsersController extends HttpServlet {
         );
 
         Transport.send(message);
+    }
+
+    private String getConfigValue(String envKey, String propertyKey, String defaultValue) {
+        String envValue = System.getenv(envKey);
+        if (envValue != null && !envValue.trim().isEmpty()) {
+            return envValue.trim();
+        }
+
+        String propertyValue = System.getProperty(propertyKey);
+        if (propertyValue != null && !propertyValue.trim().isEmpty()) {
+            return propertyValue.trim();
+        }
+
+        return defaultValue;
     }
 }

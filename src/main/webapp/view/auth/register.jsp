@@ -6,9 +6,8 @@
     <title>Register - SmartCRM</title>
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260411">
 </head>
-<body class="auth-modal-page">
+<body class="auth-modal-page register-page">
 <header class="brand-fixed">
-    
     <span>SmartCRM</span>
 </header>
     <main class="auth-modal-wrapper">
@@ -19,8 +18,14 @@
             <!-- LEFT SIDE -->
             <div class="login-modal-left">
                 <div class="login-modal-left-content">
-                    <h2 class="hero-line line1">Manage customers.</h2>
-                    <h2 class="hero-line line2">Close deals. Grow faster.</h2>
+                    <p class="left-panel-intro">SmartCRM Platform</p>
+                    <h2 class="hero-line line1">Manage customers smarter.</h2>
+                    <h2 class="hero-line line2">Close deals faster.</h2>
+                    <ul class="left-panel-bullets">
+                        <li><span class="left-panel-bullet-check">&#10004;</span> Lead Tracking</li>
+                        <li><span class="left-panel-bullet-check">&#10004;</span> Deal Pipeline</li>
+                        <li><span class="left-panel-bullet-check">&#10004;</span> Team Collaboration</li>
+                    </ul>
                 </div>
             </div>
 
@@ -28,6 +33,7 @@
             <div class="login-modal-right">
 
                 <h2 class="login-title">REGISTER</h2>
+                <p class="login-subtitle">Create your account to get started.</p>
 
                 <%
                     String error = (String) request.getAttribute("error");
@@ -38,7 +44,7 @@
                     }
                 %>
 
-                <form action="${pageContext.request.contextPath}/auth?action=register" method="POST">
+                <form action="${pageContext.request.contextPath}/register" method="POST">
 
                     <div class="form-group">
                         <label>Name</label>
@@ -65,7 +71,7 @@
 
                 <div class="link-container">
                     Already have an account?
-                    <a href="${pageContext.request.contextPath}/view/auth/login.jsp">Login here</a>
+                    <a href="${pageContext.request.contextPath}/login">Login here</a>
                 </div>
 
             </div>

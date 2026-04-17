@@ -11,7 +11,7 @@
 <%
     User user = (User) session.getAttribute("user");
     if (user == null) {
-        response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp");
+        response.sendRedirect(request.getContextPath() + "/login");
         return;
     }
 %>
@@ -38,7 +38,7 @@
                 }
             %>
 
-            <form action="${pageContext.request.contextPath}/auth?action=changePassword" method="POST">
+            <form action="${pageContext.request.contextPath}/change-password" method="POST">
                 <div class="form-group">
                     <label for="newPassword">New Password</label>
                     <input type="password" id="newPassword" name="newPassword" minlength="8" required>

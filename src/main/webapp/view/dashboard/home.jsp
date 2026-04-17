@@ -84,7 +84,7 @@
                     <span class="saas-nav-icon">&#8962;</span>
                     <span class="saas-nav-label">Dashboard</span>
                 </a>
-                <a href="#" class="saas-nav-item">
+                <a href="${pageContext.request.contextPath}/customers" class="saas-nav-item">
                     <span class="saas-nav-icon">&#9782;</span>
                     <span class="saas-nav-label">Customers</span>
                 </a>

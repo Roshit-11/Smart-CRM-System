@@ -17,13 +17,20 @@
 
             <div class="login-modal-left">
                 <div class="login-modal-left-content">
-                    <h2 class="hero-line line1">Manage customers.</h2>
-                    <h2 class="hero-line line2">Close deals. Grow faster.</h2>
+                    <p class="left-panel-intro">SmartCRM Platform</p>
+                    <h2 class="hero-line line1">Manage customers smarter.</h2>
+                    <h2 class="hero-line line2">Close deals faster.</h2>
+                    <ul class="left-panel-bullets">
+                        <li><span class="left-panel-bullet-check">&#10004;</span> Lead Tracking</li>
+                        <li><span class="left-panel-bullet-check">&#10004;</span> Deal Pipeline</li>
+                        <li><span class="left-panel-bullet-check">&#10004;</span> Team Collaboration</li>
+                    </ul>
                 </div>
             </div>
 
             <div class="login-modal-right">
                 <h2 class="login-title">LOGIN</h2>
+                <p class="login-subtitle">Welcome back. Please login to continue.</p>
 
                 <%
                     String error = (String) request.getAttribute("error");
@@ -40,7 +47,7 @@
                     }
                 %>
 
-                <form action="${pageContext.request.contextPath}/auth?action=login" method="POST">
+                <form action="${pageContext.request.contextPath}/login" method="POST">
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" required>
@@ -55,7 +62,7 @@
                 </form>
 
                 <div class="link-container">
-                    Don't have an account? <a href="${pageContext.request.contextPath}/view/auth/register.jsp">Register here</a>
+                    Don't have an account? <a href="${pageContext.request.contextPath}/register">Register here</a>
                 </div>
             </div>
         </section>
