@@ -1,18 +1,25 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.crm.app.model.User" %>
 <%@ page import="com.crm.app.model.Customer" %>
+<%@ page import="com.crm.app.model.CustomerNote" %>
+<%@ page import="com.crm.app.model.Task" %>
+<%@ page import="com.crm.app.model.ActivityLog" %>
+<%@ page import="com.crm.app.dao.NotificationDao" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.nio.charset.StandardCharsets" %>
+<%@ page import="com.crm.app.model.CompanySettings" %>
+<%@ page import="com.crm.app.model.EmailTemplate" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Customers - SmartCRM</title>
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260411">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260504b">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <jsp:include page="/view/components/page-head.jsp" />
 </head>
 <body>
 <%
@@ -45,6 +52,16 @@
     String showAdd = (String) request.getAttribute("showAdd");
     Customer editingCustomer = (Customer) request.getAttribute("editingCustomer");
 
+    @SuppressWarnings("unchecked")
+    List<CustomerNote> notes = (List<CustomerNote>) request.getAttribute("notes");
+    @SuppressWarnings("unchecked")
+    List<Task> tasks = (List<Task>) request.getAttribute("tasks");
+    @SuppressWarnings("unchecked")
+    List<ActivityLog> activityLogs = (List<ActivityLog>) request.getAttribute("activityLogs");
+    @SuppressWarnings("unchecked")
+    List<EmailTemplate> emailTemplates = (List<EmailTemplate>) request.getAttribute("emailTemplates");
+    CompanySettings companyEmailSettings = (CompanySettings) request.getAttribute("companyEmailSettings");
+
     if (search == null) search = "";
     if (status == null) status = "";
     if (assignedUser == null) assignedUser = "";
@@ -63,6 +80,17 @@
     String avatarLetter = userName.trim().isEmpty() ? "U" : userName.substring(0, 1).toUpperCase();
     String companyInitial = companyName.substring(0, 1).toUpperCase();
     String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy"));
+    boolean isAdmin = "admin".equalsIgnoreCase(user.getRole());
+
+    int unreadNotifications = 0;
+    try {
+        unreadNotifications = new NotificationDao().countUnreadNotifications(user.getId());
+    } catch (Exception ignored) {
+    }
+
+    request.setAttribute("unreadNotifications", unreadNotifications);
+    request.setAttribute("activeNav", "customers");
+    request.setAttribute("topSearchPlaceholder", "Search customers...");
 
     int totalCustomers = request.getAttribute("totalCustomers") == null ? 0 : (Integer) request.getAttribute("totalCustomers");
     int leadCount = request.getAttribute("leadCount") == null ? 0 : (Integer) request.getAttribute("leadCount");
@@ -76,57 +104,12 @@
 %>
 
 <div class="saas-shell">
-    <header class="saas-topnav">
-        <div class="saas-topnav-left">SmartCRM</div>
-        <div class="saas-topnav-center">
-            <input type="text" class="saas-search" placeholder="Search customers..." value="<%= search %>" readonly>
-        </div>
-        <div class="saas-topnav-right">
-            <span class="saas-topnav-icon">&#128276;</span>
-            <span class="saas-topnav-icon">&#9881;</span>
-            <div class="saas-profile-chip saas-profile-topnav">
-                <div class="saas-avatar"><%= avatarLetter %></div>
-                <div class="saas-profile-meta">
-                    <strong><%= userName %></strong>
-                    <span><%= companyName %></span>
-                </div>
-                <span class="saas-dropdown">&#9662;</span>
-            </div>
-        </div>
-    </header>
-
-    <aside class="saas-sidebar">
-        <div class="saas-logo">
-            <span class="saas-logo-mark"><%= companyInitial %></span>
-            <span class="saas-logo-text"><%= companyName %></span>
-        </div>
-
-        <nav class="saas-nav">
-            <a href="${pageContext.request.contextPath}/view/dashboard/home.jsp" class="saas-nav-item">
-                <span class="saas-nav-icon">&#8962;</span>
-                <span class="saas-nav-label">Dashboard</span>
-            </a>
-            <a href="${pageContext.request.contextPath}/customers" class="saas-nav-item active">
-                <span class="saas-nav-icon">&#9782;</span>
-                <span class="saas-nav-label">Customers</span>
-            </a>
-            <a href="#" class="saas-nav-item">
-                <span class="saas-nav-icon">&#128221;</span>
-                <span class="saas-nav-label">Reports</span>
-            </a>
-            <a href="#" class="saas-nav-item">
-                <span class="saas-nav-icon">&#9881;</span>
-                <span class="saas-nav-label">Settings</span>
-            </a>
-        </nav>
-
-        <form action="${pageContext.request.contextPath}/logout" method="POST" class="saas-logout-form">
-            <button type="submit" class="saas-nav-item saas-logout-btn">
-                <span class="saas-nav-icon">&#10162;</span>
-                <span class="saas-nav-label">Logout</span>
-            </button>
-        </form>
-    </aside>
+    <jsp:include page="/view/components/top-navbar.jsp" />
+    <% if ("admin".equalsIgnoreCase(user.getRole())) { %>
+        <jsp:include page="/view/components/admin-sidebar.jsp" />
+    <% } else { %>
+        <jsp:include page="/view/components/user-sidebar.jsp" />
+    <% } %>
 
     <main class="saas-main mu-main">
         <section class="mu-page-header">
@@ -139,28 +122,28 @@
 
         <section class="mu-stats-row" id="statsRow">
             <article class="mu-stat-card">
-                <div class="mu-stat-icon-wrap mu-ic-blue">&#128101;</div>
+                <div class="mu-stat-icon-wrap mu-ic-blue"><i data-lucide="users"></i></div>
                 <div>
                     <p class="mu-stat-label">Total Customers</p>
                     <p class="mu-stat-value"><%= totalCustomers %></p>
                 </div>
             </article>
             <article class="mu-stat-card">
-                <div class="mu-stat-icon-wrap mu-ic-purple">&#128161;</div>
+                <div class="mu-stat-icon-wrap mu-ic-purple"><i data-lucide="zap"></i></div>
                 <div>
                     <p class="mu-stat-label">Leads</p>
                     <p class="mu-stat-value"><%= leadCount %></p>
                 </div>
             </article>
             <article class="mu-stat-card">
-                <div class="mu-stat-icon-wrap mu-ic-green">&#9989;</div>
+                <div class="mu-stat-icon-wrap mu-ic-green"><i data-lucide="check-circle"></i></div>
                 <div>
                     <p class="mu-stat-label">Converted</p>
                     <p class="mu-stat-value"><%= convertedCount %></p>
                 </div>
             </article>
             <article class="mu-stat-card">
-                <div class="mu-stat-icon-wrap mu-ic-slate">&#10060;</div>
+                <div class="mu-stat-icon-wrap mu-ic-slate"><i data-lucide="x-circle"></i></div>
                 <div>
                     <p class="mu-stat-label">Lost</p>
                     <p class="mu-stat-value"><%= lostCount %></p>
@@ -170,6 +153,14 @@
 
         <div class="cu-layout">
             <section>
+                <% String bulkEmailError = (String) request.getAttribute("bulkEmailError"); %>
+                <% String bulkEmailSuccess = (String) request.getAttribute("bulkEmailSuccess"); %>
+                <% if (bulkEmailError != null) { %>
+                    <div class="mu-alert mu-alert-error"><i data-lucide="alert-triangle"></i>&nbsp; <%= bulkEmailError %></div>
+                <% } %>
+                <% if (bulkEmailSuccess != null) { %>
+                    <div class="mu-alert mu-alert-success"><i data-lucide="check-circle"></i>&nbsp; <%= bulkEmailSuccess %></div>
+                <% } %>
                 <form class="cu-toolbar-row" method="GET" action="${pageContext.request.contextPath}/customers">
                     <div class="cu-search-bar">
                         <div class="cu-search-wrap">
@@ -312,12 +303,15 @@
                                     <td><%= customer.getLastActivityDate() %></td>
                                     <td>
                                         <div class="cu-actions">
-                                            <button type="button" class="cu-action cu-action-view" onclick="event.stopPropagation(); window.location.href='<%= customerUrl %>';">View</button>
-                                            <button type="button" class="cu-action cu-action-edit" onclick="event.stopPropagation(); window.location.href='${pageContext.request.contextPath}/customers?<%= persistedQuery %>&customerId=<%= customer.getId() %>&showAdd=1&editId=<%= customer.getId() %>';">Edit</button>
+                                            <button type="button" class="cu-action cu-action-edit" onclick="event.stopPropagation(); window.location.href='${pageContext.request.contextPath}/customers?<%= persistedQuery %>&customerId=<%= customer.getId() %>&showAdd=1&editId=<%= customer.getId() %>';" aria-label="Edit customer" title="Edit">
+                                                <i class="fa-solid fa-pen-to-square action-icon edit"></i>
+                                            </button>
                                             <form method="POST" action="${pageContext.request.contextPath}/customers" style="display:inline;" onsubmit="event.stopPropagation();">
                                                 <input type="hidden" name="action" value="deleteCustomer">
                                                 <input type="hidden" name="customerId" value="<%= customer.getId() %>">
-                                                <button type="submit" class="cu-action cu-action-delete">Delete</button>
+                                                <button type="submit" class="cu-action cu-action-delete" data-confirm-delete aria-label="Delete customer" title="Delete">
+                                                    <i class="fa-solid fa-trash action-icon delete"></i>
+                                                </button>
                                             </form>
                                         </div>
                                     </td>
@@ -329,6 +323,64 @@
                             <% } %>
                             </tbody>
                         </table>
+                    </div>
+                </section>
+
+                <section class="cu-card" style="margin-top: 16px;">
+                    <div class="cu-list-header">
+                        <div class="cu-list-header-left">
+                            <strong style="font-size: 14px; font-weight: 700; color: #0f172a;">Bulk Email</strong>
+                            <span class="mu-count-badge">Use placeholders to personalize</span>
+                        </div>
+                    </div>
+                    <div style="padding: 16px 20px;">
+                        <form id="bulkEmailForm" method="POST" action="${pageContext.request.contextPath}/customers">
+                            <div class="cu-form-grid">
+                                <div class="cu-form-field cu-full">
+                                    <label for="bulkSubject">Subject</label>
+                                    <input type="text" id="bulkSubject" name="bulkSubject" placeholder="Email subject" required>
+                                </div>
+                                <div class="cu-form-field cu-full">
+                                    <label for="templateSelect">Template</label>
+                                    <select id="templateSelect">
+                                        <option value="">Select a template</option>
+                                        <% if (emailTemplates != null) {
+                                            for (EmailTemplate template : emailTemplates) {
+                                                String tSubject = template.getSubject() == null ? "" : template.getSubject().replace("\"", "&quot;");
+                                                String tBody = template.getBody() == null ? "" : template.getBody().replace("\"", "&quot;");
+                                                String tName = template.getTemplateName() == null ? "" : template.getTemplateName();
+                                        %>
+                                                <option value="<%= template.getId() %>" data-subject="<%= tSubject %>" data-body="<%= tBody %>" data-name="<%= tName %>"><%= tName %></option>
+                                        <% }} %>
+                                    </select>
+                                </div>
+                                <div class="cu-form-field cu-full">
+                                    <label>Placeholders</label>
+                                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                        <button type="button" class="cu-btn-light" data-placeholder="{{name}}">Name</button>
+                                        <button type="button" class="cu-btn-light" data-placeholder="{{email}}">Email</button>
+                                        <button type="button" class="cu-btn-light" data-placeholder="{{phone}}">Phone</button>
+                                        <button type="button" class="cu-btn-light" data-placeholder="{{company}}">Company</button>
+                                    </div>
+                                </div>
+                                <div class="cu-form-field cu-full">
+                                    <label for="bulkBody">Message</label>
+                                    <textarea id="bulkBody" name="bulkBody" placeholder="Write your email..." required></textarea>
+                                </div>
+                                <div class="cu-form-field cu-full">
+                                    <label for="templateName">Save as Template (optional)</label>
+                                    <input type="text" id="templateName" name="templateName" placeholder="Template name">
+                                </div>
+                            </div>
+                            <div class="cu-form-actions">
+                                <% boolean emailLinked = companyEmailSettings != null && companyEmailSettings.isVerified(); %>
+                                <% if (!emailLinked) { %>
+                                    <span class="mu-alert mu-alert-error" style="margin:0; padding:8px 12px;">Company email is not linked.</span>
+                                <% } %>
+                                <button type="submit" class="mu-btn-primary" name="action" value="saveTemplate">Save Template</button>
+                                <button type="submit" class="mu-btn-primary" name="action" value="sendBulkEmail" <%= emailLinked ? "" : "disabled" %>>Send Bulk Email</button>
+                            </div>
+                        </form>
                     </div>
                 </section>
             </section>
@@ -379,8 +431,15 @@
                         <h4>Activity Timeline</h4>
                     </div>
                     <div class="cu-timeline">
-                        <div class="cu-timeline-item">Customer selected from list<span class="cu-item-time"><%= selectedCustomer.getLastActivityDate() %></span></div>
-                        <div class="cu-timeline-item">Customer profile loaded<span class="cu-item-time"><%= currentDate %></span></div>
+                        <% if (activityLogs != null && !activityLogs.isEmpty()) {
+                            for (ActivityLog log : activityLogs) {
+                                String actor = log.getUserName() != null ? log.getUserName() : "System";
+                                String details = log.getDetails() != null ? log.getDetails() : log.getAction();
+                        %>
+                            <div class="cu-timeline-item"><%= details %><span class="cu-item-time"><%= actor %></span></div>
+                        <% }} else { %>
+                            <div class="cu-timeline-item">No activity recorded yet.</div>
+                        <% } %>
                     </div>
                 </div>
 
@@ -389,12 +448,21 @@
                         <h4>Notes</h4>
                     </div>
                     <div class="cu-notes">
-                        <div class="cu-note-item">Notes are displayed per selected customer.<span class="cu-item-time">Latest</span></div>
+                        <% if (notes != null && !notes.isEmpty()) {
+                            for (CustomerNote note : notes) {
+                                String author = note.getUserName() != null ? note.getUserName() : "User";
+                        %>
+                            <div class="cu-note-item"><%= note.getNote() %><span class="cu-item-time"><%= author %></span></div>
+                        <% }} else { %>
+                            <div class="cu-note-item">No notes yet.</div>
+                        <% } %>
                     </div>
-                    <div class="cu-inline-add">
-                        <textarea placeholder="Add a note..." disabled></textarea>
-                        <button type="button" disabled>Add</button>
-                    </div>
+                    <form class="cu-inline-add" method="POST" action="${pageContext.request.contextPath}/customers">
+                        <input type="hidden" name="action" value="addNote">
+                        <input type="hidden" name="customerId" value="<%= selectedCustomer.getId() %>">
+                        <textarea name="note" placeholder="Add a note..." required></textarea>
+                        <button type="submit">Add</button>
+                    </form>
                 </div>
 
                 <div class="cu-section">
@@ -402,17 +470,88 @@
                         <h4>Tasks / Follow-ups</h4>
                     </div>
                     <div class="cu-tasks">
-                        <div class="cu-task-item">Task tracking follows selected customer.<span class="cu-item-time">Pending</span></div>
+                        <% if (tasks != null && !tasks.isEmpty()) {
+                            for (Task task : tasks) {
+                                String assignedName = task.getAssignedUserName() != null ? task.getAssignedUserName() : "Unassigned";
+                                boolean canEditTask = isAdmin || task.getAssignedUserId() == user.getId();
+                                boolean canDeleteTask = isAdmin || task.getCreatedBy() == user.getId();
+                        %>
+                            <div class="cu-task-item">
+                                <strong><%= task.getTitle() %></strong>
+                                <span class="cu-item-time">Due: <%= task.getDueDate() %> | <%= assignedName %> | <%= task.getStatus() %></span>
+                                <form method="POST" action="${pageContext.request.contextPath}/customers" style="margin-top:8px;">
+                                    <input type="hidden" name="action" value="updateTaskStatus">
+                                    <input type="hidden" name="taskId" value="<%= task.getId() %>">
+                                    <input type="hidden" name="customerId" value="<%= selectedCustomer.getId() %>">
+                                    <select name="taskStatus" <%= task.getAssignedUserId() == user.getId() ? "" : "disabled" %>>
+                                        <option value="Pending" <%= "Pending".equalsIgnoreCase(task.getStatus()) ? "selected" : "" %>>Pending</option>
+                                        <option value="In Progress" <%= "In Progress".equalsIgnoreCase(task.getStatus()) ? "selected" : "" %>>In Progress</option>
+                                        <option value="Completed" <%= "Completed".equalsIgnoreCase(task.getStatus()) ? "selected" : "" %>>Completed</option>
+                                    </select>
+                                    <button type="submit" <%= task.getAssignedUserId() == user.getId() ? "" : "disabled" %>>Update</button>
+                                </form>
+                                <% if (canEditTask || canDeleteTask) { %>
+                                    <details style="margin-top:8px;">
+                                        <summary>Manage task</summary>
+                                        <% if (canEditTask) { %>
+                                            <form method="POST" action="${pageContext.request.contextPath}/customers" style="margin-top:8px;">
+                                                <input type="hidden" name="action" value="updateTask">
+                                                <input type="hidden" name="taskId" value="<%= task.getId() %>">
+                                                <div class="cu-task-add-row">
+                                                    <input type="text" name="taskTitle" value="<%= task.getTitle() %>" required>
+                                                </div>
+                                                <div class="cu-task-add-row">
+                                                    <input type="date" name="dueDate" value="<%= task.getDueDate() %>" required>
+                                                    <select name="taskStatus" required>
+                                                        <option value="Pending" <%= "Pending".equalsIgnoreCase(task.getStatus()) ? "selected" : "" %>>Pending</option>
+                                                        <option value="In Progress" <%= "In Progress".equalsIgnoreCase(task.getStatus()) ? "selected" : "" %>>In Progress</option>
+                                                        <option value="Completed" <%= "Completed".equalsIgnoreCase(task.getStatus()) ? "selected" : "" %>>Completed</option>
+                                                    </select>
+                                                    <% if (isAdmin) { %>
+                                                        <select name="taskAssignedUserId" required>
+                                                            <% if (assignedUsers != null) {
+                                                                for (User assignee : assignedUsers) { %>
+                                                                    <option value="<%= assignee.getId() %>" <%= assignee.getId() == task.getAssignedUserId() ? "selected" : "" %>><%= assignee.getName() %></option>
+                                                            <% }} %>
+                                                        </select>
+                                                    <% } else { %>
+                                                        <input type="hidden" name="taskAssignedUserId" value="<%= task.getAssignedUserId() %>">
+                                                    <% } %>
+                                                    <button type="submit">Save</button>
+                                                </div>
+                                            </form>
+                                        <% } %>
+                                        <% if (canDeleteTask) { %>
+                                            <form method="POST" action="${pageContext.request.contextPath}/customers" style="margin-top:8px;">
+                                                <input type="hidden" name="action" value="deleteTask">
+                                                <input type="hidden" name="taskId" value="<%= task.getId() %>">
+                                                <button type="submit" data-confirm-delete>Delete Task</button>
+                                            </form>
+                                        <% } %>
+                                    </details>
+                                <% } %>
+                            </div>
+                        <% }} else { %>
+                            <div class="cu-task-item">No tasks yet.</div>
+                        <% } %>
                     </div>
-                    <div class="cu-task-add-group">
+                    <form class="cu-task-add-group" method="POST" action="${pageContext.request.contextPath}/customers">
+                        <input type="hidden" name="action" value="createTask">
+                        <input type="hidden" name="customerId" value="<%= selectedCustomer.getId() %>">
                         <div class="cu-task-add-row">
-                            <input type="text" placeholder="Task title" disabled>
+                            <input type="text" name="taskTitle" placeholder="Task title" required>
                         </div>
                         <div class="cu-task-add-row">
-                            <input type="date" disabled>
-                            <button type="button" disabled>Create Task</button>
+                            <input type="date" name="dueDate" required>
+                            <select name="taskAssignedUserId" required>
+                                <% if (assignedUsers != null) {
+                                    for (User assignee : assignedUsers) { %>
+                                        <option value="<%= assignee.getId() %>"><%= assignee.getName() %></option>
+                                <% }} %>
+                            </select>
+                            <button type="submit">Create Task</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
                 <% } else { %>
                 <div class="cu-detail-empty">No customer selected.</div>
@@ -421,11 +560,13 @@
         </div>
     </main>
 </div>
+
+<jsp:include page="/view/components/notifications-panel.jsp" />
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const bulkApplyBtn = document.getElementById("bulkApplyBtn");
     const bulkDeleteBtn = document.getElementById("bulkDeleteBtn");
-    const bulkForm = document.getElementById("bulkActionForm");
+    const bulkActionForm = document.getElementById("bulkActionForm");
     const bulkAction = document.getElementById("bulkAction");
     const bulkStatus = document.getElementById("bulkStatus");
     const bulkStatusHidden = document.getElementById("bulkStatusHidden");
@@ -437,7 +578,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function submitBulk(actionName) {
-        if (!bulkForm || !bulkAction || !bulkSelectedContainer) {
+        if (!bulkActionForm || !bulkAction || !bulkSelectedContainer) {
             return;
         }
 
@@ -458,7 +599,7 @@ document.addEventListener("DOMContentLoaded", function () {
             bulkSelectedContainer.appendChild(input);
         });
 
-        bulkForm.submit();
+        bulkActionForm.submit();
     }
 
     if (bulkApplyBtn) {
@@ -475,7 +616,61 @@ document.addEventListener("DOMContentLoaded", function () {
             submitBulk("bulkDelete");
         });
     }
+
+    const bulkEmailForm = document.getElementById("bulkEmailForm");
+    const bulkBody = document.getElementById("bulkBody");
+    const bulkSubject = document.getElementById("bulkSubject");
+    const templateSelect = document.getElementById("templateSelect");
+    const templateName = document.getElementById("templateName");
+
+    if (bulkEmailForm) {
+        bulkEmailForm.addEventListener("submit", function () {
+            const ids = selectedIds();
+            const existing = bulkEmailForm.querySelectorAll("input[name='selectedCustomerIds']");
+            existing.forEach(function (el) { el.remove(); });
+            ids.forEach(function (id) {
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "selectedCustomerIds";
+                input.value = id;
+                bulkEmailForm.appendChild(input);
+            });
+        });
+    }
+
+    document.querySelectorAll("[data-placeholder]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            if (!bulkBody) {
+                return;
+            }
+            const placeholder = btn.getAttribute("data-placeholder");
+            const start = bulkBody.selectionStart || 0;
+            const end = bulkBody.selectionEnd || 0;
+            const text = bulkBody.value || "";
+            bulkBody.value = text.substring(0, start) + placeholder + text.substring(end);
+            bulkBody.focus();
+            bulkBody.selectionStart = bulkBody.selectionEnd = start + placeholder.length;
+        });
+    });
+
+    if (templateSelect) {
+        templateSelect.addEventListener("change", function () {
+            const selected = templateSelect.options[templateSelect.selectedIndex];
+            if (!selected || !selected.value) {
+                return;
+            }
+            if (bulkSubject) {
+                bulkSubject.value = selected.getAttribute("data-subject") || "";
+            }
+            if (bulkBody) {
+                bulkBody.value = selected.getAttribute("data-body") || "";
+            }
+            if (templateName) {
+                templateName.value = selected.getAttribute("data-name") || "";
+            }
+        });
+    }
 });
+
 </script>
-</body>
-</html>
+

@@ -8,6 +8,9 @@ public class User {
     private String role;
     private String companyName;
     private boolean firstLogin;
+    private boolean notifyCustomerAssign = true;
+    private boolean notifyTaskAssign = true;
+    private boolean notifyTaskUpdate = true;
 
     // Constructor
     public User() {
@@ -119,5 +122,29 @@ public class User {
 
     public void setFirstLogin(boolean firstLogin) {
         this.firstLogin = firstLogin;
+    }
+
+    public boolean isNotifyCustomerAssign() {
+        return notifyCustomerAssign;
+    }
+
+    public void setNotifyCustomerAssign(boolean notifyCustomerAssign) {
+        this.notifyCustomerAssign = notifyCustomerAssign;
+    }
+
+    public boolean isNotifyTaskAssign() {
+        return notifyTaskAssign;
+    }
+
+    public void setNotifyTaskAssign(boolean notifyTaskAssign) {
+        this.notifyTaskAssign = notifyTaskAssign;
+    }
+
+    public boolean isNotifyTaskUpdate() {
+        return notifyTaskUpdate;
+    }
+
+    public void setNotifyTaskUpdate(boolean notifyTaskUpdate) {
+        this.notifyTaskUpdate = notifyTaskUpdate;
     }
 }

@@ -9,11 +9,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CustomerDao {
 
-    public List<Customer> getCustomersByTeam(int userId, String search, String status, String assignedUser, String sort) {
+    public List<Customer> getCustomersByCompany(String companyName, String search, String status, String assignedUser, String sort) {
         List<Customer> customers = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder(
@@ -22,11 +24,11 @@ public class CustomerDao {
                         + "FROM customers c "
                         + "LEFT JOIN users au ON c.assigned_user_id = au.id "
                         + "LEFT JOIN users cu ON c.created_by = cu.id "
-                        + "WHERE c.created_by = ?"
+                        + "WHERE cu.company_name = ?"
         );
 
         List<Object> params = new ArrayList<>();
-        params.add(userId);
+        params.add(companyName);
 
         String safeSearch = search == null ? "" : search.trim();
         String safeStatus = status == null ? "" : status.trim();
@@ -83,19 +85,19 @@ public class CustomerDao {
         return customers;
     }
 
-    public Customer getCustomerByIdAndTeam(int customerId, int userId) {
+    public Customer getCustomerByIdAndCompany(int customerId, String companyName) {
         String sql = "SELECT c.id, c.name, c.email, c.phone, c.company, c.status, c.assigned_user_id, c.created_by, c.created_at, c.updated_at, "
                 + "au.name AS assigned_user_name, cu.company_name AS team_name "
                 + "FROM customers c "
                 + "LEFT JOIN users au ON c.assigned_user_id = au.id "
                 + "LEFT JOIN users cu ON c.created_by = cu.id "
-                + "WHERE c.id = ? AND c.created_by = ?";
+                + "WHERE c.id = ? AND cu.company_name = ?";
 
         try (Connection conn = DBConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, customerId);
-            pstmt.setInt(2, userId);
+            pstmt.setString(2, companyName);
 
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -131,9 +133,9 @@ public class CustomerDao {
         }
     }
 
-    public boolean updateCustomer(Customer customer) {
+    public boolean updateCustomer(Customer customer, String companyName) {
         String sql = "UPDATE customers SET name = ?, email = ?, phone = ?, company = ?, status = ?, assigned_user_id = ?, updated_at = CURRENT_TIMESTAMP "
-                + "WHERE id = ? AND created_by = ?";
+                + "WHERE id = ? AND created_by IN (SELECT id FROM users WHERE company_name = ?)";
 
         try (Connection conn = DBConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -145,7 +147,7 @@ public class CustomerDao {
             pstmt.setString(5, customer.getStatus());
             pstmt.setInt(6, customer.getAssignedUserId());
             pstmt.setInt(7, customer.getId());
-            pstmt.setInt(8, customer.getCreatedBy());
+            pstmt.setString(8, companyName);
 
             return pstmt.executeUpdate() > 0;
 
@@ -155,14 +157,14 @@ public class CustomerDao {
         }
     }
 
-    public boolean deleteCustomer(int customerId, int userId) {
-        String sql = "DELETE FROM customers WHERE id = ? AND created_by = ?";
+    public boolean deleteCustomer(int customerId, String companyName) {
+        String sql = "DELETE FROM customers WHERE id = ? AND created_by IN (SELECT id FROM users WHERE company_name = ?)";
 
         try (Connection conn = DBConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, customerId);
-            pstmt.setInt(2, userId);
+            pstmt.setString(2, companyName);
             return pstmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -171,10 +173,10 @@ public class CustomerDao {
         }
     }
 
-    public List<User> getAssignedUsersByTeam(int userId) {
+    public List<User> getAssignedUsersByCompany(String companyName) {
         String sql = "SELECT id, name, email, role, company_name, is_first_login "
                 + "FROM users "
-                + "WHERE company_name = (SELECT company_name FROM users WHERE id = ?) "
+                + "WHERE company_name = ? "
                 + "ORDER BY name ASC";
 
         List<User> users = new ArrayList<>();
@@ -182,7 +184,7 @@ public class CustomerDao {
         try (Connection conn = DBConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, userId);
+            pstmt.setString(1, companyName);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -201,6 +203,104 @@ public class CustomerDao {
         }
 
         return users;
+    }
+
+    public int countCustomersByCompany(String companyName) {
+        String sql = "SELECT COUNT(*) FROM customers c JOIN users u ON c.created_by = u.id WHERE u.company_name = ?";
+
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, companyName);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public Map<String, Integer> countByStatus(String companyName) {
+        String sql = "SELECT c.status, COUNT(*) AS total "
+                + "FROM customers c "
+                + "JOIN users u ON c.created_by = u.id "
+                + "WHERE u.company_name = ? "
+                + "GROUP BY c.status";
+
+        Map<String, Integer> counts = new HashMap<>();
+
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, companyName);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                counts.put(rs.getString("status"), rs.getInt("total"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return counts;
+    }
+
+    public List<Map<String, Object>> getCustomerCountPerUser(String companyName) {
+        String sql = "SELECT u.name AS user_name, COUNT(c.id) AS total "
+                + "FROM users u "
+                + "LEFT JOIN customers c ON c.assigned_user_id = u.id "
+                + "AND c.created_by IN (SELECT id FROM users WHERE company_name = ?) "
+                + "WHERE u.company_name = ? "
+                + "GROUP BY u.id, u.name "
+                + "ORDER BY u.name ASC";
+
+        List<Map<String, Object>> results = new ArrayList<>();
+
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, companyName);
+            pstmt.setString(2, companyName);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Map<String, Object> row = new HashMap<>();
+                row.put("name", rs.getString("user_name"));
+                row.put("total", rs.getInt("total"));
+                results.add(row);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return results;
+    }
+
+    public int countCustomersByAssignedUser(int userId, String companyName) {
+        String sql = "SELECT COUNT(*) FROM customers c "
+                + "JOIN users u ON c.created_by = u.id "
+                + "WHERE u.company_name = ? AND c.assigned_user_id = ?";
+
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, companyName);
+            pstmt.setInt(2, userId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 
     private Customer mapCustomer(ResultSet rs) throws SQLException {

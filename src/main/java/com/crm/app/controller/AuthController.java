@@ -98,9 +98,9 @@ public class AuthController extends HttpServlet {
             }
 
             if ("admin".equalsIgnoreCase(user.getRole())) {
-                response.sendRedirect(request.getContextPath() + "/view/dashboard/admin-dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/admin-dashboard");
             } else {
-                response.sendRedirect(request.getContextPath() + "/view/dashboard/home.jsp");
+                response.sendRedirect(request.getContextPath() + "/dashboard");
             }
         } else {
             // Invalid credentials - email not found or password incorrect
@@ -217,9 +217,9 @@ public class AuthController extends HttpServlet {
         session.setAttribute("user", sessionUser);
 
         if ("admin".equalsIgnoreCase(sessionUser.getRole())) {
-            response.sendRedirect(request.getContextPath() + "/view/dashboard/admin-dashboard.jsp");
+            response.sendRedirect(request.getContextPath() + "/admin-dashboard");
         } else {
-            response.sendRedirect(request.getContextPath() + "/view/dashboard/home.jsp");
+            response.sendRedirect(request.getContextPath() + "/dashboard");
         }
     }
 

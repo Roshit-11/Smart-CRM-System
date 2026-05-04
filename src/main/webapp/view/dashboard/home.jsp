@@ -1,110 +1,76 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.crm.app.model.User" %>
+<%@ page import="com.crm.app.model.Task" %>
+<%@ page import="com.crm.app.model.ActivityLog" %>
+<%@ page import="com.crm.app.dao.NotificationDao" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.time.LocalTime" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>User Dashboard - SmartCRM</title>
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260411">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260504b">
+    <jsp:include page="/view/components/page-head.jsp" />
 </head>
 <body>
     <%
         User user = (User) session.getAttribute("user");
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
         if (user.isFirstLogin()) {
-            response.sendRedirect(request.getContextPath() + "/view/auth/change-password.jsp");
+            response.sendRedirect(request.getContextPath() + "/change-password");
             return;
         }
 
         if ("admin".equalsIgnoreCase(user.getRole())) {
-            response.sendRedirect(request.getContextPath() + "/view/dashboard/admin-dashboard.jsp");
+            response.sendRedirect(request.getContextPath() + "/admin-dashboard");
             return;
         }
 
         String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy"));
         int hour = LocalTime.now().getHour();
         String greeting;
-        if (hour < 12) {
-            greeting = "Good morning";
-        } else if (hour < 17) {
-            greeting = "Good afternoon";
-        } else {
-            greeting = "Good evening";
-        }
+        if (hour < 12) greeting = "Good morning";
+        else if (hour < 17) greeting = "Good afternoon";
+        else greeting = "Good evening";
 
         String userName = user.getName() != null ? user.getName() : "User";
-        String avatarLetter = userName.trim().isEmpty() ? "U" : userName.substring(0, 1).toUpperCase();
-        String companyName = (String) session.getAttribute("companyName");
-        if (companyName == null || companyName.trim().isEmpty()) {
-            companyName = user.getCompanyName();
+
+        Integer totalCustomersAttr = (Integer) request.getAttribute("totalCustomers");
+        Integer activityCountAttr = (Integer) request.getAttribute("activityCount");
+        int totalCustomers = totalCustomersAttr != null ? totalCustomersAttr : 0;
+        int activityCount = activityCountAttr != null ? activityCountAttr : 0;
+        Integer myTasksCountAttr = (Integer) request.getAttribute("myTasksCount");
+        int myTasksCount = myTasksCountAttr != null ? myTasksCountAttr : 0;
+
+        @SuppressWarnings("unchecked")
+        List<Task> myTasks = (List<Task>) request.getAttribute("myTasks");
+        @SuppressWarnings("unchecked")
+        List<ActivityLog> recentActivities = (List<ActivityLog>) request.getAttribute("recentActivities");
+
+        int unreadNotifications = 0;
+        try {
+            unreadNotifications = new NotificationDao().countUnreadNotifications(user.getId());
+        } catch (Exception ignored) {
         }
-        if (companyName == null || companyName.trim().isEmpty()) {
-            companyName = "SmartCRM";
-        }
-        String companyInitial = companyName.substring(0, 1).toUpperCase();
+
+        request.setAttribute("unreadNotifications", unreadNotifications);
+        request.setAttribute("activeNav", "dashboard");
+        request.setAttribute("topSearchPlaceholder", "Search customers, reports...");
+
+        LocalDate today = LocalDate.now();
+        java.sql.Date todaySql = java.sql.Date.valueOf(today);
     %>
 
     <div class="saas-shell">
-        <header class="saas-topnav">
-            <div class="saas-topnav-left">SmartCRM</div>
-
-            <div class="saas-topnav-center">
-                <input type="text" class="saas-search" placeholder="Search customers, reports...">
-            </div>
-
-            <div class="saas-topnav-right">
-                <span class="saas-topnav-icon">&#128276;</span>
-                <span class="saas-topnav-icon">&#9881;</span>
-                <div class="saas-profile-chip saas-profile-topnav">
-                    <div class="saas-avatar"><%= avatarLetter %></div>
-                    <div class="saas-profile-meta">
-                        <strong><%= userName %></strong>
-                        <span><%= companyName %></span>
-                    </div>
-                    <span class="saas-dropdown">&#9662;</span>
-                </div>
-            </div>
-        </header>
-
-        <aside class="saas-sidebar">
-            <div class="saas-logo">
-                <span class="saas-logo-mark"><%= companyInitial %></span>
-                <span class="saas-logo-text"><%= companyName %></span>
-            </div>
-
-            <nav class="saas-nav">
-                <a href="${pageContext.request.contextPath}/view/dashboard/home.jsp" class="saas-nav-item active">
-                    <span class="saas-nav-icon">&#8962;</span>
-                    <span class="saas-nav-label">Dashboard</span>
-                </a>
-                <a href="${pageContext.request.contextPath}/customers" class="saas-nav-item">
-                    <span class="saas-nav-icon">&#9782;</span>
-                    <span class="saas-nav-label">Customers</span>
-                </a>
-                <a href="#" class="saas-nav-item">
-                    <span class="saas-nav-icon">&#128221;</span>
-                    <span class="saas-nav-label">Reports</span>
-                </a>
-                <a href="#" class="saas-nav-item">
-                    <span class="saas-nav-icon">&#9881;</span>
-                    <span class="saas-nav-label">Settings</span>
-                </a>
-            </nav>
-
-            <form action="${pageContext.request.contextPath}/logout" method="POST" class="saas-logout-form">
-                <button type="submit" class="saas-nav-item saas-logout-btn">
-                    <span class="saas-nav-icon">&#10162;</span>
-                    <span class="saas-nav-label">Logout</span>
-                </button>
-            </form>
-        </aside>
+        <jsp:include page="/view/components/top-navbar.jsp" />
+        <jsp:include page="/view/components/user-sidebar.jsp" />
 
         <main class="saas-main">
             <section class="saas-welcome-block">
@@ -114,34 +80,83 @@
 
             <section class="saas-card-grid">
                 <article class="saas-card">
+                    <div class="saas-card-icon"><i data-lucide="users"></i></div>
                     <p class="saas-card-title">Total Customers</p>
-                    <h3>124</h3>
-                    <span class="saas-card-hint">Assigned to your account</span>
+                    <h3><%= totalCustomers %></h3>
+                    <span class="saas-card-hint">Assigned to your team</span>
                 </article>
-                <article class="saas-card">
+                <article class="saas-card card-accent-purple">
+                    <div class="saas-card-icon"><i data-lucide="activity"></i></div>
                     <p class="saas-card-title">Activity</p>
-                    <h3>18</h3>
+                    <h3><%= activityCount %></h3>
                     <span class="saas-card-hint">Updates in last 7 days</span>
+                </article>
+                <article class="saas-card card-accent-amber">
+                    <div class="saas-card-icon"><i data-lucide="check-square"></i></div>
+                    <p class="saas-card-title">My Tasks</p>
+                    <h3><%= myTasksCount %></h3>
+                    <span class="saas-card-hint">Assigned to you</span>
                 </article>
             </section>
 
             <div class="saas-content-grid">
                 <section class="saas-panel">
                     <h3>Tasks</h3>
-                    <ul class="saas-list">
-                        <li>Follow up with 5 pending customer leads</li>
-                        <li>Update profile and notification preferences</li>
-                        <li>Review weekly sales pipeline notes</li>
-                    </ul>
+                    <% if (myTasks == null || myTasks.isEmpty()) { %>
+                        <div class="empty-state">
+                            <i data-lucide="clipboard-check"></i>
+                            <p class="empty-state-title">No tasks assigned</p>
+                            <p class="empty-state-sub">You're all caught up!</p>
+                        </div>
+                    <% } else {
+                        for (Task task : myTasks) {
+                            String status = task.getStatus() == null ? "Pending" : task.getStatus();
+                            boolean isCompleted = "Completed".equalsIgnoreCase(status);
+                            boolean isOverdue = !isCompleted && task.getDueDate() != null && task.getDueDate().before(todaySql);
+                            String dotClass = isOverdue ? "task-dot--overdue"
+                                    : "Completed".equalsIgnoreCase(status) ? "task-dot--completed"
+                                    : "In Progress".equalsIgnoreCase(status) ? "task-dot--in-progress"
+                                    : "task-dot--pending";
+                            String badgeClass = isOverdue ? "task-badge--overdue"
+                                    : "Completed".equalsIgnoreCase(status) ? "task-badge--completed"
+                                    : "In Progress".equalsIgnoreCase(status) ? "task-badge--in-progress"
+                                    : "task-badge--pending";
+                            String badgeText = isOverdue ? "Overdue" : status;
+                            String rowClass = isOverdue ? "task-row task-row--overdue" : "task-row";
+                    %>
+                        <div class="<%= rowClass %>">
+                            <span class="task-dot <%= dotClass %>"></span>
+                            <div class="task-body">
+                                <p class="task-title"><%= task.getTitle() %></p>
+                                <span class="task-meta"><i data-lucide="calendar"></i> Due <%= task.getDueDate() %></span>
+                            </div>
+                            <span class="task-badge <%= badgeClass %>"><%= badgeText %></span>
+                        </div>
+                    <% }} %>
                 </section>
 
                 <section class="saas-panel">
                     <h3>Recent Activity</h3>
-                    <ul class="saas-list">
-                        <li>Profile viewed by Admin team</li>
-                        <li>Customer note updated 2 hours ago</li>
-                        <li>New customer assigned yesterday</li>
-                    </ul>
+                    <% if (recentActivities == null || recentActivities.isEmpty()) { %>
+                        <div class="empty-state">
+                            <i data-lucide="activity"></i>
+                            <p class="empty-state-title">No recent activity</p>
+                            <p class="empty-state-sub">Your team's actions will appear here.</p>
+                        </div>
+                    <% } else {
+                        for (ActivityLog log : recentActivities) {
+                            String actor = log.getUserName() != null ? log.getUserName() : "Unknown";
+                            String details = log.getDetails() != null ? log.getDetails() : log.getAction();
+                            String initial = actor.substring(0, 1).toUpperCase();
+                    %>
+                        <div class="activity-row">
+                            <div class="activity-avatar"><%= initial %></div>
+                            <div class="activity-body">
+                                <p class="activity-text"><strong><%= actor %></strong> &middot; <%= details %></p>
+                                <span class="activity-time"><%= log.getCreatedAt() %></span>
+                            </div>
+                        </div>
+                    <% }} %>
                 </section>
             </div>
 
@@ -153,5 +168,7 @@
             </section>
         </main>
     </div>
+
+    <jsp:include page="/view/components/notifications-panel.jsp" />
 </body>
 </html>

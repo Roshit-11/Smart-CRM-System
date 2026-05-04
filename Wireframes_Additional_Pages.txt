@@ -1,0 +1,156 @@
+ADDITIONAL WIREFRAME / UI PAGES (SmartCRM)
+(Extra pages beyond Login, Register, Manage Users, and Customers)
+
+This section is written to match the style of your existing wireframe documentation:
+- short purpose statement
+- brief UI layout description
+- bullet points for key components
+- screenshot placeholder (Figure caption)
+
+============================================================
+5.5 Change Password Interface (First Login Password Reset)
+
+The change password interface is used to enforce secure onboarding for users created by an administrator or marked as first-time login. After authentication, users who have `is_first_login = true` are redirected to this page before being allowed to access any dashboard modules.
+
+
+Figure 15 Change Password Page UI
+
+The screen uses the same two-column layout as the login and registration pages for consistency:
+• The left section displays a security-themed illustration and continues the SmartCRM branding.
+• The right section contains a password update form.
+
+Key components include:
+• New password and confirm password fields
+• Basic password rules (minimum length enforced in the controller)
+• A single “Update Password” button
+
+This interface supports a clear, single-purpose flow so users can quickly complete the required password reset and proceed into the system.
+
+============================================================
+5.6 User Dashboard (Home) Interface
+
+The user dashboard (home screen) is the main landing page for regular users after login. It provides a quick overview of performance and activity without overwhelming the user with detailed data entry screens.
+
+
+Figure 16 User Dashboard (Home) UI
+
+The interface layout includes:
+• A top navigation bar containing search, notifications access, and user profile section
+• A left sidebar for navigation (user-side navigation)
+• A welcome block showing the current date and a time-based greeting
+
+Dashboard content is organized into a clean grid:
+• Summary cards showing key metrics (e.g., total customers, recent activity count, and task count)
+• A “Tasks” panel listing tasks assigned to the logged-in user with status indicators
+• A “Recent Activity” panel displaying latest actions recorded in the system
+• An “Account Snapshot” panel displaying the logged-in user’s email, role, and user ID
+
+This dashboard is designed for quick scanning, allowing users to understand priorities (tasks) and recent CRM changes at a glance.
+
+============================================================
+5.7 Admin Dashboard Interface
+
+The admin dashboard is the primary landing page for administrators. Compared to the user dashboard, it provides a broader view of the organisation’s usage and activity.
+
+
+Figure 17 Admin Dashboard UI
+
+Key components include:
+• Top navigation bar with search and notification indicator
+• Admin sidebar navigation
+• Welcome block with date and greeting
+
+Core dashboard widgets:
+• Summary cards showing total users, total customers, and recent activity
+• A “Tasks” panel showing recent or team tasks, including overdue indicators
+• A “Recent Activity” panel showing audit trail entries for the company
+• An “Admin Snapshot” section summarising the admin account information
+
+This layout helps admins monitor system adoption and operational activity across the company.
+
+============================================================
+5.8 Reports Interface (User Reports)
+
+The user reports interface provides visual summaries of customer pipeline and activity trends. It is designed to help a regular user understand their workload and progress without manual calculations.
+
+
+Figure 18 User Reports Page UI
+
+The interface includes:
+• A top navigation bar and user sidebar
+• Summary cards showing key totals such as:
+  - Total customers (company-wide)
+  - Customers assigned to the logged-in user
+  - Leads, converted (won), and lost counts
+
+The reporting content is primarily displayed using charts:
+• A pie chart for customer status distribution (Lead / Converted / Lost)
+• A line chart showing recent activity over time (e.g., last 7 days)
+
+The page is designed to present insights quickly, using charts and summary cards rather than long tables.
+
+============================================================
+5.9 Reports Interface (Admin Reports)
+
+The admin reports interface provides organisation-level analytics for administrators. It extends the user reports view by including user-level breakdowns.
+
+
+Figure 19 Admin Reports Page UI
+
+The interface includes:
+• Top navigation bar and admin sidebar
+• Summary cards for overall metrics:
+  - Total users
+  - Total customers
+  - Leads / Converted / Lost
+
+The reporting section includes multiple charts:
+• Status distribution chart to visualise the sales pipeline
+• Customers-per-user chart to monitor customer allocation across team members
+• Activity trend chart to track usage and interactions over recent days
+
+This layout supports managerial oversight by combining pipeline health (status) with team performance indicators (per-user allocation).
+
+============================================================
+5.10 Notifications Panel (In-App Notification Center)
+
+The notification panel is an in-app component that provides real-time feedback and alerts to users. It is designed as a lightweight overlay panel rather than a full page, so users can review updates without leaving their current task.
+
+
+Figure 20 Notifications Panel UI
+
+Key components include:
+• A scrollable list of notifications
+• Unread vs read styling to help users prioritise new updates
+• Quick actions:
+  - “Mark read” for individual notifications
+  - “Mark all as read” to clear the list
+
+Notifications may include context-aware links that take the user directly to:
+• A specific customer record (e.g., assignment notification)
+• A customer’s task section (e.g., task assignment or task update notification)
+
+This design helps users stay informed about assignments and workflow changes while maintaining a smooth navigation experience.
+
+============================================================
+5.11 Settings Interface
+
+The settings interface allows users to manage their account details and preferences. It is designed as a tabbed layout so multiple account options can be grouped logically in a single screen.
+
+
+Figure 21 Settings Page UI
+
+The interface includes:
+• A top navigation bar and a sidebar (admin or user, depending on role)
+• Tabs for different settings categories, such as:
+  - Profile (update name and email)
+  - Password (update login password)
+  - Notifications (toggle customer/task notification preferences)
+  - Appearance (dark mode)
+  - Email (company email linking and verification actions for admins)
+  - Company (admin-only summary)
+
+The settings screen is structured to keep sensitive actions (password/email linking) separate from basic profile edits, improving usability and reducing mistakes.
+
+============================================================
+(End of additional wireframe pages)

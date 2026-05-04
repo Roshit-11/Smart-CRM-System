@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Change Password - SmartCRM</title>
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260411">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260504b">
+    <jsp:include page="/view/components/page-head.jsp" />
 </head>
 <body class="auth-modal-page">
 <%
@@ -28,25 +29,37 @@
 
         <div class="login-modal-right">
             <h2 class="login-title">CHANGE PASSWORD</h2>
+            <p class="login-subtitle">Set a strong new password to secure your account.</p>
 
             <%
                 String error = (String) request.getAttribute("error");
                 if (error != null) {
             %>
-                <div class="error-message"><%= error %></div>
+                <div class="error-message"><i data-lucide="alert-circle"></i><span><%= error %></span></div>
             <%
                 }
             %>
 
-            <form action="${pageContext.request.contextPath}/change-password" method="POST">
+            <form action="${pageContext.request.contextPath}/change-password" method="POST" data-loading data-loading-text="Updating...">
                 <div class="form-group">
                     <label for="newPassword">New Password</label>
-                    <input type="password" id="newPassword" name="newPassword" minlength="8" required>
+                    <div class="auth-input-wrap">
+                        <input type="password" id="newPassword" name="newPassword" minlength="8" required data-password-strength>
+                        <button type="button" class="auth-password-toggle" aria-label="Toggle password visibility">
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength"><div class="password-strength-bar" data-strength="0"></div></div>
                 </div>
 
                 <div class="form-group">
                     <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" minlength="8" required>
+                    <div class="auth-input-wrap">
+                        <input type="password" id="confirmPassword" name="confirmPassword" minlength="8" required>
+                        <button type="button" class="auth-password-toggle" aria-label="Toggle password visibility">
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <button type="submit" class="login-submit-btn">Update Password</button>

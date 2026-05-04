@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.crm.app.model.User" %>
+<%@ page import="com.crm.app.dao.NotificationDao" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.time.LocalTime" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
@@ -9,21 +10,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Manage Users - SmartCRM</title>
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260412">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260504b">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <jsp:include page="/view/components/page-head.jsp" />
 </head>
 <body>
     <%
         User user = (User) session.getAttribute("user");
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
         if (user.isFirstLogin()) {
-            response.sendRedirect(request.getContextPath() + "/view/auth/change-password.jsp");
+            response.sendRedirect(request.getContextPath() + "/change-password");
             return;
         }
         if (!"admin".equalsIgnoreCase(user.getRole())) {
-            response.sendRedirect(request.getContextPath() + "/view/dashboard/home.jsp");
+            response.sendRedirect(request.getContextPath() + "/dashboard");
             return;
         }
 
@@ -56,65 +59,25 @@
         int totalUsersCount = totalUsersCountAttr != null ? totalUsersCountAttr : 0;
         int adminsCount     = adminsCountAttr     != null ? adminsCountAttr     : 0;
         int usersCount      = usersCountAttr      != null ? usersCountAttr      : 0;
+
+        int unreadNotifications = 0;
+        try {
+            unreadNotifications = new NotificationDao().countUnreadNotifications(user.getId());
+        } catch (Exception ignored) {
+        }
+
+        request.setAttribute("unreadNotifications", unreadNotifications);
+        request.setAttribute("activeNav", "users");
+        request.setAttribute("topSearchPlaceholder", "Search users, customers, reports...");
     %>
 
     <div class="saas-shell">
 
         <!-- TOP NAV -->
-        <header class="saas-topnav">
-            <div class="saas-topnav-left">SmartCRM</div>
-            <div class="saas-topnav-center">
-                <input type="text" class="saas-search" placeholder="Search users, customers, reports…">
-            </div>
-            <div class="saas-topnav-right">
-                <span class="saas-topnav-icon">&#128276;</span>
-                <span class="saas-topnav-icon">&#9881;</span>
-                <div class="saas-profile-chip saas-profile-topnav">
-                    <div class="saas-avatar"><%= avatarLetter %></div>
-                    <div class="saas-profile-meta">
-                        <strong><%= userName %></strong>
-                        <span><%= companyName %></span>
-                    </div>
-                    <span class="saas-dropdown">&#9662;</span>
-                </div>
-            </div>
-        </header>
+        <jsp:include page="/view/components/top-navbar.jsp" />
 
         <!-- SIDEBAR -->
-        <aside class="saas-sidebar">
-            <div class="saas-logo">
-                <span class="saas-logo-mark"><%= companyInitial %></span>
-                <span class="saas-logo-text"><%= companyName %></span>
-            </div>
-            <nav class="saas-nav">
-                <a href="${pageContext.request.contextPath}/view/dashboard/admin-dashboard.jsp" class="saas-nav-item">
-                    <span class="saas-nav-icon">&#8962;</span>
-                    <span class="saas-nav-label">Dashboard</span>
-                </a>
-                <a href="#" class="saas-nav-item">
-                    <span class="saas-nav-icon">&#9782;</span>
-                    <span class="saas-nav-label">Customers</span>
-                </a>
-                <a href="${pageContext.request.contextPath}/manage-users" class="saas-nav-item active">
-                    <span class="saas-nav-icon">&#128101;</span>
-                    <span class="saas-nav-label">Manage Users</span>
-                </a>
-                <a href="#" class="saas-nav-item">
-                    <span class="saas-nav-icon">&#128221;</span>
-                    <span class="saas-nav-label">Reports</span>
-                </a>
-                <a href="#" class="saas-nav-item">
-                    <span class="saas-nav-icon">&#9881;</span>
-                    <span class="saas-nav-label">Settings</span>
-                </a>
-            </nav>
-            <form action="${pageContext.request.contextPath}/logout" method="POST" class="saas-logout-form">
-                <button type="submit" class="saas-nav-item saas-logout-btn">
-                    <span class="saas-nav-icon">&#10162;</span>
-                    <span class="saas-nav-label">Logout</span>
-                </button>
-            </form>
-        </aside>
+        <jsp:include page="/view/components/admin-sidebar.jsp" />
 
         <!-- MAIN -->
         <main class="saas-main mu-main">
@@ -122,12 +85,13 @@
             <!-- Page header -->
             <div class="mu-page-header">
                 <div>
+
                     <p class="saas-date"><%= currentDate %></p>
                     <h1 class="mu-page-title"><%= greeting %>, <%= userName %></h1>
                     <p class="mu-page-sub">Managing team for <strong><%= companyName %></strong></p>
                 </div>
                 <button type="button" class="mu-btn-primary" onclick="toggleCreatePanel()">
-                    &#43;&nbsp; Add User
+                    <i data-lucide="user-plus"></i>&nbsp; Add User
                 </button>
             </div>
 
@@ -137,36 +101,36 @@
                 String success = (String) request.getAttribute("success");
                 if (error != null) {
             %>
-                <div class="mu-alert mu-alert-error">&#9888;&nbsp; <%= error %></div>
+                <div class="mu-alert mu-alert-error"><i data-lucide="alert-triangle"></i>&nbsp; <%= error %></div>
             <% } if (success != null) { %>
-                <div class="mu-alert mu-alert-success">&#10003;&nbsp; <%= success %></div>
+                <div class="mu-alert mu-alert-success"><i data-lucide="check-circle"></i>&nbsp; <%= success %></div>
             <% } %>
 
             <!-- STAT CARDS -->
             <div class="mu-stats-row">
                 <div class="mu-stat-card">
-                    <div class="mu-stat-icon-wrap mu-ic-blue">&#128101;</div>
+                    <div class="mu-stat-icon-wrap mu-ic-blue"><i data-lucide="users"></i></div>
                     <div>
                         <p class="mu-stat-label">Total Users</p>
                         <p class="mu-stat-value"><%= totalUsersCount %></p>
                     </div>
                 </div>
                 <div class="mu-stat-card">
-                    <div class="mu-stat-icon-wrap mu-ic-purple">&#128274;</div>
+                    <div class="mu-stat-icon-wrap mu-ic-purple"><i data-lucide="shield"></i></div>
                     <div>
                         <p class="mu-stat-label">Admins</p>
                         <p class="mu-stat-value"><%= adminsCount %></p>
                     </div>
                 </div>
                 <div class="mu-stat-card">
-                    <div class="mu-stat-icon-wrap mu-ic-green">&#128100;</div>
+                    <div class="mu-stat-icon-wrap mu-ic-green"><i data-lucide="user"></i></div>
                     <div>
                         <p class="mu-stat-label">Regular Users</p>
                         <p class="mu-stat-value"><%= usersCount %></p>
                     </div>
                 </div>
                 <div class="mu-stat-card">
-                    <div class="mu-stat-icon-wrap mu-ic-slate">&#128203;</div>
+                    <div class="mu-stat-icon-wrap mu-ic-slate"><i data-lucide="filter"></i></div>
                     <div>
                         <p class="mu-stat-label">Filtered Results</p>
                         <p class="mu-stat-value"><%= memberCount %></p>
@@ -181,7 +145,7 @@
                         <h3 class="mu-create-title">Create New User</h3>
                         <p class="mu-create-sub">New users join <strong><%= companyName %></strong> with the <strong>user</strong> role and will be prompted to set a password on first login.</p>
                     </div>
-                    <button type="button" class="mu-close-btn" onclick="toggleCreatePanel()">&#10005;</button>
+                    <button type="button" class="mu-close-btn" onclick="toggleCreatePanel()"><i data-lucide="x"></i></button>
                 </div>
                 <form action="${pageContext.request.contextPath}/manage-users" method="POST" class="mu-create-form">
                     <input type="hidden" name="action" value="create">
@@ -198,7 +162,7 @@
                         </div>
                         <div class="mu-field mu-field-btn">
                             <label>&nbsp;</label>
-                            <button type="submit" class="mu-btn-primary mu-btn-full">&#43;&nbsp; Create User</button>
+                            <button type="submit" class="mu-btn-primary mu-btn-full"><i data-lucide="user-plus"></i>&nbsp; Create User</button>
                         </div>
                     </div>
                 </form>
@@ -215,7 +179,7 @@
                     </div>
                     <form action="${pageContext.request.contextPath}/manage-users" method="GET" class="mu-filter-form">
                         <div class="mu-search-wrap">
-                            <span class="mu-search-icon">&#128269;</span>
+                            <span class="mu-search-icon"><i data-lucide="search"></i></span>
                             <input type="text" name="search"
                                    value="<%= searchQuery %>"
                                    placeholder="Search name or email…"
@@ -233,7 +197,7 @@
                 <!-- Table / empty state -->
                 <% if (teamMembers == null || teamMembers.isEmpty()) { %>
                     <div class="mu-empty-state">
-                        <div class="mu-empty-icon">&#128101;</div>
+                        <div class="mu-empty-icon"><i data-lucide="users"></i></div>
                         <p class="mu-empty-title"><%= searchQuery.isEmpty() ? "No team members yet" : "No results found" %></p>
                         <p class="mu-empty-sub"><%= searchQuery.isEmpty() && "all".equalsIgnoreCase(roleFilter)
                             ? "Click \"Add User\" to invite your first team member."
@@ -269,7 +233,9 @@
                                     <td><span class="<%= mRoleCls %>"><%= mRole %></span></td>
                                     <td>
                                         <div class="mu-row-actions">
-                                            <button type="button" class="mu-btn-edit" onclick="showEditRow(<%= member.getId() %>)">&#9998; Edit</button>
+                                            <button type="button" class="mu-btn-edit" onclick="showEditRow(<%= member.getId() %>)" aria-label="Edit user" title="Edit">
+                                                <i class="fa-solid fa-pen-to-square action-icon edit"></i>
+                                            </button>
                                             <form action="${pageContext.request.contextPath}/manage-users" method="POST"
                                                   onsubmit="return confirm('Delete <%= member.getName() %>? This cannot be undone.');"
                                                   style="display:inline;">
@@ -277,7 +243,9 @@
                                                 <input type="hidden" name="userId"  value="<%= member.getId() %>">
                                                 <input type="hidden" name="search"  value="<%= searchQuery %>">
                                                 <input type="hidden" name="role"    value="<%= roleFilter %>">
-                                                <button type="submit" class="mu-btn-delete">&#128465; Delete</button>
+                                                <button type="submit" class="mu-btn-delete" aria-label="Delete user" title="Delete">
+                                                    <i class="fa-solid fa-trash action-icon delete"></i>
+                                                </button>
                                             </form>
                                         </div>
                                     </td>
@@ -292,7 +260,7 @@
                                             <div class="mu-edit-inner">
                                                 <span class="mu-edit-label">Editing name:</span>
                                                 <input type="text" name="name" value="<%= member.getName() %>" class="mu-edit-input" required>
-                                                <button type="submit" class="mu-btn-save">&#10003; Save</button>
+                                                <button type="submit" class="mu-btn-save"><i data-lucide="check"></i> Save</button>
                                                 <button type="button" class="mu-btn-cancel" onclick="hideEditRow(<%= member.getId() %>)">Cancel</button>
                                             </div>
                                         </form>
@@ -307,6 +275,8 @@
 
         </main>
     </div>
+
+    <jsp:include page="/view/components/notifications-panel.jsp" />
 
     <script>
         function toggleCreatePanel() {

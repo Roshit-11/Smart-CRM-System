@@ -44,7 +44,9 @@ public class UserDao {
      * Validate user credentials (login)
      */
     public User validateUser(String email, String password) {
-        String sql = "SELECT id, name, email, password, role, company_name, is_first_login FROM users WHERE email = ? AND status = 'active'";
+        String sql = "SELECT id, name, email, password, role, company_name, is_first_login, "
+                + "notify_customer_assign, notify_task_assign, notify_task_update "
+                + "FROM users WHERE email = ? AND status = 'active'";
         
         try (Connection conn = DBConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -64,6 +66,9 @@ public class UserDao {
                     user.setRole(rs.getString("role"));
                     user.setCompanyName(rs.getString("company_name"));
                     user.setFirstLogin(rs.getBoolean("is_first_login"));
+                    user.setNotifyCustomerAssign(rs.getBoolean("notify_customer_assign"));
+                    user.setNotifyTaskAssign(rs.getBoolean("notify_task_assign"));
+                    user.setNotifyTaskUpdate(rs.getBoolean("notify_task_update"));
                     return user;
                 }
             }
@@ -73,6 +78,59 @@ public class UserDao {
         }
         
         return null; // Invalid credentials
+    }
+
+    public boolean updateProfile(int userId, String name, String email) {
+        String sql = "UPDATE users SET name = ?, email = ? WHERE id = ?";
+
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, name);
+            pstmt.setString(2, email);
+            pstmt.setInt(3, userId);
+            return pstmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updatePassword(int userId, String password) {
+        String sql = "UPDATE users SET password = ? WHERE id = ?";
+
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, password);
+            pstmt.setInt(2, userId);
+            return pstmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateNotificationSettings(int userId, int customerAssign, int taskAssign, int taskUpdate) {
+        String sql = "UPDATE users "
+                + "SET notify_customer_assign = ?, notify_task_assign = ?, notify_task_update = ? "
+                + "WHERE id = ?";
+
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, customerAssign);
+            pstmt.setInt(2, taskAssign);
+            pstmt.setInt(3, taskUpdate);
+            pstmt.setInt(4, userId);
+            return pstmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -173,5 +231,76 @@ public class UserDao {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public int countUsersByCompany(String companyName) {
+        String sql = "SELECT COUNT(*) FROM users WHERE company_name = ?";
+
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, companyName);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public List<User> getAdminUsersByCompany(String companyName) {
+        String sql = "SELECT id, name, email, role, company_name, is_first_login FROM users WHERE company_name = ? AND role = 'admin'";
+        List<User> users = new ArrayList<>();
+
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, companyName);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setRole(rs.getString("role"));
+                user.setCompanyName(rs.getString("company_name"));
+                user.setFirstLogin(rs.getBoolean("is_first_login"));
+                users.add(user);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return users;
+    }
+
+    public User getNotificationSettingsById(int userId) {
+        String sql = "SELECT id, notify_customer_assign, notify_task_assign, notify_task_update FROM users WHERE id = ?";
+
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setNotifyCustomerAssign(rs.getBoolean("notify_customer_assign"));
+                user.setNotifyTaskAssign(rs.getBoolean("notify_task_assign"));
+                user.setNotifyTaskUpdate(rs.getBoolean("notify_task_update"));
+                return user;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

@@ -259,23 +259,23 @@ public class ManageUsersController extends HttpServlet {
     private boolean isAdminSession(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
         if (session == null) {
-            response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return false;
         }
 
         User user = (User) session.getAttribute("user");
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return false;
         }
 
         if (user.isFirstLogin()) {
-            response.sendRedirect(request.getContextPath() + "/view/auth/change-password.jsp");
+            response.sendRedirect(request.getContextPath() + "/change-password");
             return false;
         }
 
         if (!"admin".equalsIgnoreCase(user.getRole())) {
-            response.sendRedirect(request.getContextPath() + "/view/dashboard/home.jsp");
+            response.sendRedirect(request.getContextPath() + "/dashboard");
             return false;
         }
 
