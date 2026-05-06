@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Manage Users - SmartCRM</title>
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260504b">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260505">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <jsp:include page="/view/components/page-head.jsp" />
 </head>

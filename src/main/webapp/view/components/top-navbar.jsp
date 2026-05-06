@@ -10,10 +10,6 @@
     if (companyName == null || companyName.trim().isEmpty()) {
         companyName = "SmartCRM";
     }
-    String topSearchPlaceholder = (String) request.getAttribute("topSearchPlaceholder");
-    if (topSearchPlaceholder == null || topSearchPlaceholder.trim().isEmpty()) {
-        topSearchPlaceholder = "Search...";
-    }
     Integer unread = (Integer) request.getAttribute("unreadNotifications");
     int unreadCount = unread != null ? unread : 0;
 %>
@@ -25,13 +21,9 @@
         SmartCRM
     </div>
 
-    <div class="saas-topnav-center">
-        <input type="text" class="saas-search" placeholder="<%= topSearchPlaceholder %>">
-    </div>
-
     <div class="saas-topnav-right">
         <a href="#" id="ntfBell" class="saas-topnav-icon" aria-label="Notifications">
-            <i data-lucide="bell"></i>
+            <i data-lucide="bell-ring"></i>
             <% if (unreadCount > 0) { %>
                 <span class="ntf-badge"><%= unreadCount %></span>
             <% } %>

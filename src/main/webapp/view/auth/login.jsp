@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Login - SmartCRM</title>
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260504b">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260509">
     <jsp:include page="/view/components/page-head.jsp" />
 </head>
 <body class="auth-modal-page">

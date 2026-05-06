@@ -207,7 +207,23 @@
         });
     }
 
-    /* ── 9. Form submit loading state ────────────────────────── */
+    /* ── 9. Date input: scroll into view so the native picker fits ─ */
+    function initDateInputScroll() {
+        document.querySelectorAll('input[type="date"]').forEach(function (input) {
+            input.addEventListener("focus", function () {
+                // Defer so the browser opens the picker first, then we scroll
+                setTimeout(function () {
+                    try {
+                        input.scrollIntoView({ block: "center", behavior: "smooth" });
+                    } catch (e) {
+                        input.scrollIntoView();
+                    }
+                }, 50);
+            });
+        });
+    }
+
+    /* ── 10. Form submit loading state ────────────────────────── */
     function initFormLoading() {
         document.querySelectorAll("form[data-loading]").forEach(function (form) {
             form.addEventListener("submit", function () {
@@ -234,6 +250,7 @@
         initPasswordToggle();
         initPasswordStrength();
         initThemeToggle();
+        initDateInputScroll();
         initFormLoading();
     });
 })();

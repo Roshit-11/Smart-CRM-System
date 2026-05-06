@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Reports - SmartCRM</title>
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260504b">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260505">
     <jsp:include page="/view/components/page-head.jsp" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>

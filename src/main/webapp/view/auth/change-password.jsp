@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Change Password - SmartCRM</title>
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260504b">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css?v=20260509">
     <jsp:include page="/view/components/page-head.jsp" />
 </head>
 <body class="auth-modal-page">
@@ -23,10 +23,16 @@
     <section class="login-modal">
         <div class="login-modal-left">
             <div class="login-modal-left-content">
-                <img src="${pageContext.request.contextPath}/images/laptop.png" alt="Security" class="login-laptop-image">
+                <p class="left-panel-intro">SmartCRM Platform</p>
+                <h2 class="hero-line line1">Manage customers smarter.</h2>
+                <h2 class="hero-line line2">Close deals faster.</h2>
+                <ul class="left-panel-bullets">
+                    <li><span class="left-panel-bullet-check"><i data-lucide="check-circle-2"></i></span> Lead Tracking</li>
+                    <li><span class="left-panel-bullet-check"><i data-lucide="check-circle-2"></i></span> Deal Pipeline</li>
+                    <li><span class="left-panel-bullet-check"><i data-lucide="check-circle-2"></i></span> Team Collaboration</li>
+                </ul>
             </div>
         </div>
-
         <div class="login-modal-right">
             <h2 class="login-title">CHANGE PASSWORD</h2>
             <p class="login-subtitle">Set a strong new password to secure your account.</p>

@@ -24,19 +24,23 @@
             <span class="saas-nav-label">Dashboard</span>
         </a>
         <a href="${pageContext.request.contextPath}/customers" class="saas-nav-item<%= "customers".equals(activeNav_admSide) ? " active" : "" %>">
-            <span class="saas-nav-icon"><i data-lucide="users"></i></span>
+            <span class="saas-nav-icon"><i data-lucide="contact-2"></i></span>
             <span class="saas-nav-label">Customers</span>
         </a>
+        <a href="${pageContext.request.contextPath}/deals" class="saas-nav-item<%= "deals".equals(activeNav_admSide) ? " active" : "" %>">
+            <span class="saas-nav-icon"><i data-lucide="trending-up"></i></span>
+            <span class="saas-nav-label">Deals</span>
+        </a>
         <a href="${pageContext.request.contextPath}/reports" class="saas-nav-item<%= "reports".equals(activeNav_admSide) ? " active" : "" %>">
-            <span class="saas-nav-icon"><i data-lucide="bar-chart-3"></i></span>
+            <span class="saas-nav-icon"><i data-lucide="bar-chart-2"></i></span>
             <span class="saas-nav-label">Reports</span>
         </a>
         <a href="${pageContext.request.contextPath}/manage-users" class="saas-nav-item<%= "users".equals(activeNav_admSide) ? " active" : "" %>">
-            <span class="saas-nav-icon"><i data-lucide="user-cog"></i></span>
+            <span class="saas-nav-icon"><i data-lucide="users-round"></i></span>
             <span class="saas-nav-label">Manage Users</span>
         </a>
         <a href="${pageContext.request.contextPath}/settings" class="saas-nav-item<%= "settings".equals(activeNav_admSide) ? " active" : "" %>">
-            <span class="saas-nav-icon"><i data-lucide="settings"></i></span>
+            <span class="saas-nav-icon"><i data-lucide="sliders-horizontal"></i></span>
             <span class="saas-nav-label">Settings</span>
         </a>
     </nav>
