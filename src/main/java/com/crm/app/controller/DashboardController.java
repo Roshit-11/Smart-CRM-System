@@ -63,7 +63,9 @@ public class DashboardController extends HttpServlet {
         Timestamp since = Timestamp.valueOf(LocalDateTime.now().minusDays(7));
         int activityCount = activityLogDao.countActivitySince(companyName, since);
         int myTasksCount = taskDao.countTasksByUser(user.getId());
+        int overdueTasksCount = taskDao.countOverdueTasksByUser(user.getId());
         List<Task> myTasks = taskDao.getTasksByUser(user.getId());
+        List<Task> upcomingTasks = taskDao.getUpcomingTasksByUser(user.getId());
         List<ActivityLog> recentActivities = activityLogDao.getRecentActivities(user.getCompanyName());
 
         request.setAttribute("totalCustomers", totalCustomers);
@@ -72,7 +74,9 @@ public class DashboardController extends HttpServlet {
         request.setAttribute("convertedCount", statusCounts.getOrDefault("Won", 0));
         request.setAttribute("lostCount", statusCounts.getOrDefault("Lost", 0));
         request.setAttribute("myTasksCount", myTasksCount);
+        request.setAttribute("overdueTasksCount", overdueTasksCount);
         request.setAttribute("myTasks", myTasks);
+        request.setAttribute("upcomingTasks", upcomingTasks);
         request.setAttribute("recentActivities", recentActivities);
 
         request.getRequestDispatcher("/view/dashboard/home.jsp").forward(request, response);

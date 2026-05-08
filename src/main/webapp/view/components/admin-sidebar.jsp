@@ -39,6 +39,10 @@
             <span class="saas-nav-icon"><i data-lucide="users-round"></i></span>
             <span class="saas-nav-label">Manage Users</span>
         </a>
+        <a href="${pageContext.request.contextPath}/contact-admin" class="saas-nav-item<%= "issues".equals(activeNav_admSide) ? " active" : "" %>">
+            <span class="saas-nav-icon"><i data-lucide="life-buoy"></i></span>
+            <span class="saas-nav-label">Issue Reports</span>
+        </a>
         <a href="${pageContext.request.contextPath}/settings" class="saas-nav-item<%= "settings".equals(activeNav_admSide) ? " active" : "" %>">
             <span class="saas-nav-icon"><i data-lucide="sliders-horizontal"></i></span>
             <span class="saas-nav-label">Settings</span>

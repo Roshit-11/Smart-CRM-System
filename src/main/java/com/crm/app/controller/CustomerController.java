@@ -201,6 +201,8 @@ public class CustomerController extends HttpServlet {
             handleUpdateStatus(request, user, companyName);
         } else if ("addNote".equals(action)) {
             handleAddNote(request, user, companyName);
+        } else if ("deleteNote".equals(action)) {
+            handleDeleteNote(request, user, companyName);
         } else if ("createTask".equals(action)) {
             handleCreateTask(request, user, companyName);
         } else if ("updateTaskStatus".equals(action)) {
@@ -423,9 +425,28 @@ public class CustomerController extends HttpServlet {
         }
     }
 
+    private void handleDeleteNote(HttpServletRequest request, User user, String companyName) {
+        String noteIdParam = read(request.getParameter("noteId"));
+        String customerIdParam = read(request.getParameter("customerId"));
+        if (noteIdParam.isEmpty() || customerIdParam.isEmpty()) {
+            return;
+        }
+        try {
+            int noteId = Integer.parseInt(noteIdParam);
+            int customerId = Integer.parseInt(customerIdParam);
+            if (customerNoteDao.deleteNote(noteId, user.getId(), companyName)) {
+                logActivity(companyName, customerId, user.getId(), "NOTE_DELETED", "Note deleted");
+            }
+        } catch (NumberFormatException ignored) {
+            // ignore invalid id
+        }
+    }
+
     private void handleCreateTask(HttpServletRequest request, User user, String companyName) {
         String customerIdParam = read(request.getParameter("customerId"));
         String title = read(request.getParameter("taskTitle"));
+        String description = read(request.getParameter("taskDescription"));
+        String priority = read(request.getParameter("taskPriority"));
         String dueDateParam = read(request.getParameter("dueDate"));
         String assignedUserIdParam = read(request.getParameter("taskAssignedUserId"));
 
@@ -444,6 +465,8 @@ public class CustomerController extends HttpServlet {
             Task task = new Task();
             task.setCustomerId(customerId);
             task.setTitle(title);
+            task.setDescription(description.isEmpty() ? null : description);
+            task.setPriority(priority.isEmpty() ? "Medium" : priority);
             task.setDueDate(Date.valueOf(dueDateParam));
             task.setStatus("Pending");
             task.setAssignedUserId(assignedUserId);
@@ -518,6 +541,8 @@ public class CustomerController extends HttpServlet {
     private void handleUpdateTask(HttpServletRequest request, User user, String companyName) {
         String taskIdParam = read(request.getParameter("taskId"));
         String title = read(request.getParameter("taskTitle"));
+        String description = read(request.getParameter("taskDescription"));
+        String priority = read(request.getParameter("taskPriority"));
         String dueDateParam = read(request.getParameter("dueDate"));
         String status = read(request.getParameter("taskStatus"));
         String assignedUserIdParam = read(request.getParameter("taskAssignedUserId"));
@@ -554,6 +579,8 @@ public class CustomerController extends HttpServlet {
             Task updated = new Task();
             updated.setId(taskId);
             updated.setTitle(title);
+            updated.setDescription(description.isEmpty() ? null : description);
+            updated.setPriority(priority.isEmpty() ? existingTask.getPriority() : priority);
             updated.setDueDate(Date.valueOf(dueDateParam));
             updated.setStatus(status);
             updated.setAssignedUserId(assignedUserId);

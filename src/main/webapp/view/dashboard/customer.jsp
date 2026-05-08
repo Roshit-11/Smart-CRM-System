@@ -250,8 +250,8 @@
                 <section class="cu-card">
                     <div class="cu-list-header">
                         <div class="cu-list-header-left">
-                            <strong style="font-size: 14px; font-weight: 700; color: #0f172a;">Customers List</strong>
-                            <span id="resultCount" class="mu-count-badge"><%= customers == null ? 0 : customers.size() %> results</span>
+                            <strong class="cu-list-title">Customers List</strong>
+                            <span id="resultCount" class="cu-list-meta"><%= customers == null ? 0 : customers.size() %> results</span>
                         </div>
                         <div class="cu-list-header-right">
                             <form id="bulkActionForm" method="POST" action="${pageContext.request.contextPath}/customers" class="cu-bulk-form">
@@ -329,8 +329,8 @@
                 <section class="cu-card" style="margin-top: 16px;">
                     <div class="cu-list-header">
                         <div class="cu-list-header-left">
-                            <strong style="font-size: 14px; font-weight: 700; color: #0f172a;">Bulk Email</strong>
-                            <span class="mu-count-badge">Use placeholders to personalize</span>
+                            <strong class="cu-list-title">Bulk Email</strong>
+                            <span class="cu-list-meta">Use placeholders to personalize</span>
                         </div>
                     </div>
                     <div style="padding: 16px 20px;">
@@ -387,98 +387,193 @@
 
             <aside class="cu-card cu-details" id="detailPanel">
                 <% if (selectedCustomer != null) { %>
+                <%-- Customer header — always visible --%>
                 <div class="cu-details-head">
-                    <div>
+                    <div class="cu-details-head-left">
                         <div class="cu-details-head-avatar"><%= selectedCustomer.getName().substring(0, 1).toUpperCase() %></div>
-                        <h3><%= selectedCustomer.getName() %></h3>
-                        <p class="cu-meta">Last activity: <%= selectedCustomer.getLastActivityDate() %></p>
+                        <div>
+                            <h3><%= selectedCustomer.getName() %></h3>
+                            <p class="cu-meta">Last activity: <%= selectedCustomer.getLastActivityDate() %></p>
+                        </div>
                     </div>
                     <span class="cu-status cu-status-<%= selectedCustomer.getStatus() %>"><%= selectedCustomer.getStatus() %></span>
                 </div>
 
-                <div class="cu-info-grid">
-                    <div class="cu-info-item"><span>Email</span><strong><%= selectedCustomer.getEmail() %></strong></div>
-                    <div class="cu-info-item"><span>Phone</span><strong><%= selectedCustomer.getPhone() %></strong></div>
-                    <div class="cu-info-item"><span>Company</span><strong><%= selectedCustomer.getCompany() %></strong></div>
-                    <div class="cu-info-item"><span>Assigned User</span><strong><%= selectedCustomer.getAssignedUser() %></strong></div>
+                <%-- Tab bar --%>
+                <div class="cu-tabs" id="cuTabs">
+                    <button class="cu-tab active" data-tab="overview"><i data-lucide="user"></i><span>Overview</span></button>
+                    <button class="cu-tab" data-tab="notes"><i data-lucide="file-text"></i><span>Notes
+                        <% if (notes != null && !notes.isEmpty()) { %><em class="cu-tab-count"><%= notes.size() %></em><% } %>
+                    </span></button>
+                    <button class="cu-tab" data-tab="activity"><i data-lucide="activity"></i><span>Activity
+                        <% if (activityLogs != null && !activityLogs.isEmpty()) { %><em class="cu-tab-count"><%= activityLogs.size() %></em><% } %>
+                    </span></button>
+                    <button class="cu-tab" data-tab="tasks"><i data-lucide="check-square"></i><span>Tasks
+                        <% if (tasks != null && !tasks.isEmpty()) { %><em class="cu-tab-count"><%= tasks.size() %></em><% } %>
+                    </span></button>
                 </div>
 
-                <div class="cu-section">
-                    <div class="cu-section-header">
-                        <h4>Status Pipeline</h4>
+                <%-- OVERVIEW TAB --%>
+                <div class="cu-tab-panel active" id="tab-overview">
+                    <div class="cu-info-grid">
+                        <div class="cu-info-item"><span>Email</span><strong><%= selectedCustomer.getEmail() %></strong></div>
+                        <div class="cu-info-item"><span>Phone</span><strong><%= selectedCustomer.getPhone() %></strong></div>
+                        <div class="cu-info-item"><span>Company</span><strong><%= selectedCustomer.getCompany() %></strong></div>
+                        <div class="cu-info-item"><span>Assigned</span><strong><%= selectedCustomer.getAssignedUser() %></strong></div>
                     </div>
-                    <div class="cu-pipeline-row">
-                        <select disabled>
-                            <option><%= selectedCustomer.getStatus() %></option>
-                        </select>
-                        <form method="POST" action="${pageContext.request.contextPath}/customers" style="display:flex; gap:8px; width:100%;">
-                            <input type="hidden" name="action" value="updateStatus">
-                            <input type="hidden" name="customerId" value="<%= selectedCustomer.getId() %>">
-                            <select name="status">
-                                <option value="Lead" <%= "Lead".equalsIgnoreCase(selectedCustomer.getStatus()) ? "selected" : "" %>>Lead</option>
-                                <option value="Contacted" <%= "Contacted".equalsIgnoreCase(selectedCustomer.getStatus()) ? "selected" : "" %>>Contacted</option>
-                                <option value="Negotiation" <%= "Negotiation".equalsIgnoreCase(selectedCustomer.getStatus()) ? "selected" : "" %>>Negotiation</option>
-                                <option value="Won" <%= "Won".equalsIgnoreCase(selectedCustomer.getStatus()) ? "selected" : "" %>>Won</option>
-                                <option value="Lost" <%= "Lost".equalsIgnoreCase(selectedCustomer.getStatus()) ? "selected" : "" %>>Lost</option>
-                            </select>
-                            <button type="submit">Update</button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="cu-section">
-                    <div class="cu-section-header">
-                        <h4>Activity Timeline</h4>
-                    </div>
-                    <div class="cu-timeline">
-                        <% if (activityLogs != null && !activityLogs.isEmpty()) {
-                            for (ActivityLog log : activityLogs) {
-                                String actor = log.getUserName() != null ? log.getUserName() : "System";
-                                String details = log.getDetails() != null ? log.getDetails() : log.getAction();
-                        %>
-                            <div class="cu-timeline-item"><%= details %><span class="cu-item-time"><%= actor %></span></div>
-                        <% }} else { %>
-                            <div class="cu-timeline-item">No activity recorded yet.</div>
-                        <% } %>
+                    <div class="cu-section">
+                        <div class="cu-section-header"><h4>Status Pipeline</h4></div>
+                        <div class="cu-pipeline-row">
+                            <select disabled><option><%= selectedCustomer.getStatus() %></option></select>
+                            <form method="POST" action="${pageContext.request.contextPath}/customers" style="display:flex; gap:8px; width:100%;">
+                                <input type="hidden" name="action" value="updateStatus">
+                                <input type="hidden" name="customerId" value="<%= selectedCustomer.getId() %>">
+                                <select name="status">
+                                    <option value="Lead" <%= "Lead".equalsIgnoreCase(selectedCustomer.getStatus()) ? "selected" : "" %>>Lead</option>
+                                    <option value="Contacted" <%= "Contacted".equalsIgnoreCase(selectedCustomer.getStatus()) ? "selected" : "" %>>Contacted</option>
+                                    <option value="Negotiation" <%= "Negotiation".equalsIgnoreCase(selectedCustomer.getStatus()) ? "selected" : "" %>>Negotiation</option>
+                                    <option value="Won" <%= "Won".equalsIgnoreCase(selectedCustomer.getStatus()) ? "selected" : "" %>>Won</option>
+                                    <option value="Lost" <%= "Lost".equalsIgnoreCase(selectedCustomer.getStatus()) ? "selected" : "" %>>Lost</option>
+                                </select>
+                                <button type="submit">Update</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
-                <div class="cu-section">
-                    <div class="cu-section-header">
-                        <h4>Notes</h4>
-                    </div>
-                    <div class="cu-notes">
+                <%-- NOTES TAB --%>
+                <div class="cu-tab-panel" id="tab-notes">
+                    <form class="cu-note-compose" method="POST" action="${pageContext.request.contextPath}/customers">
+                        <input type="hidden" name="action" value="addNote">
+                        <input type="hidden" name="customerId" value="<%= selectedCustomer.getId() %>">
+                        <textarea name="note" class="cu-note-textarea" placeholder="Write a note..." rows="3" required></textarea>
+                        <div class="cu-note-compose-footer">
+                            <button type="submit" class="cu-btn-primary"><i data-lucide="plus"></i> Add Note</button>
+                        </div>
+                    </form>
+                    <div class="cu-notes-list">
                         <% if (notes != null && !notes.isEmpty()) {
                             for (CustomerNote note : notes) {
                                 String author = note.getUserName() != null ? note.getUserName() : "User";
+                                String initial = author.substring(0, 1).toUpperCase();
+                                boolean canDeleteNote = note.getUserId() == user.getId() || isAdmin;
                         %>
-                            <div class="cu-note-item"><%= note.getNote() %><span class="cu-item-time"><%= author %></span></div>
+                            <div class="cu-note-card">
+                                <div class="cu-note-card-header">
+                                    <div class="cu-note-avatar"><%= initial %></div>
+                                    <div class="cu-note-meta">
+                                        <strong class="cu-note-author"><%= author %></strong>
+                                        <span class="cu-note-time"><%= note.getCreatedAt() %></span>
+                                    </div>
+                                    <% if (canDeleteNote) { %>
+                                    <form method="POST" action="${pageContext.request.contextPath}/customers" class="cu-note-delete-form">
+                                        <input type="hidden" name="action" value="deleteNote">
+                                        <input type="hidden" name="noteId" value="<%= note.getId() %>">
+                                        <input type="hidden" name="customerId" value="<%= selectedCustomer.getId() %>">
+                                        <button type="submit" class="cu-note-delete-btn" data-confirm-delete title="Delete note"><i data-lucide="trash-2"></i></button>
+                                    </form>
+                                    <% } %>
+                                </div>
+                                <p class="cu-note-body"><%= note.getNote() %></p>
+                            </div>
                         <% }} else { %>
-                            <div class="cu-note-item">No notes yet.</div>
+                            <div class="cu-empty-state">
+                                <i data-lucide="file-text"></i>
+                                <p>No notes yet. Add the first one above.</p>
+                            </div>
                         <% } %>
                     </div>
-                    <form class="cu-inline-add" method="POST" action="${pageContext.request.contextPath}/customers">
-                        <input type="hidden" name="action" value="addNote">
-                        <input type="hidden" name="customerId" value="<%= selectedCustomer.getId() %>">
-                        <textarea name="note" placeholder="Add a note..." required></textarea>
-                        <button type="submit">Add</button>
-                    </form>
                 </div>
 
-                <div class="cu-section">
-                    <div class="cu-section-header">
-                        <h4>Tasks / Follow-ups</h4>
+                <%-- ACTIVITY TAB --%>
+                <div class="cu-tab-panel" id="tab-activity">
+                    <div class="cu-timeline-list">
+                        <%
+                            java.time.ZoneId zoneId = java.time.ZoneId.systemDefault();
+                            java.time.Instant now = java.time.Instant.now();
+                            if (activityLogs != null && !activityLogs.isEmpty()) {
+                                for (ActivityLog log : activityLogs) {
+                                    String actor = log.getUserName() != null ? log.getUserName() : "System";
+                                    String detail = log.getDetails() != null && !log.getDetails().isEmpty() ? log.getDetails() : log.getAction();
+                                    String action = log.getAction() != null ? log.getAction() : "";
+                                    String tlIcon = "activity";
+                                    String tlColor = "indigo";
+                                    if (action.contains("CUSTOMER_CREATED")) { tlIcon = "user-plus"; tlColor = "green"; }
+                                    else if (action.contains("CUSTOMER_UPDATED")) { tlIcon = "edit-3"; tlColor = "blue"; }
+                                    else if (action.contains("CUSTOMER_DELETED")) { tlIcon = "trash-2"; tlColor = "red"; }
+                                    else if (action.contains("STATUS_CHANGED")) { tlIcon = "refresh-cw"; tlColor = "amber"; }
+                                    else if (action.contains("NOTE_ADDED")) { tlIcon = "file-text"; tlColor = "purple"; }
+                                    else if (action.contains("NOTE_DELETED")) { tlIcon = "file-minus"; tlColor = "red"; }
+                                    else if (action.contains("TASK_CREATED")) { tlIcon = "check-square"; tlColor = "blue"; }
+                                    else if (action.contains("TASK_UPDATED") || action.contains("TASK_REASSIGNED")) { tlIcon = "edit"; tlColor = "amber"; }
+                                    else if (action.contains("TASK_DELETED")) { tlIcon = "trash"; tlColor = "red"; }
+                                    else if (action.contains("BULK_EMAIL")) { tlIcon = "mail"; tlColor = "indigo"; }
+                                    // relative time
+                                    String relTime = "";
+                                    if (log.getCreatedAt() != null) {
+                                        long diffSec = now.getEpochSecond() - log.getCreatedAt().toInstant().getEpochSecond();
+                                        if (diffSec < 60) relTime = "Just now";
+                                        else if (diffSec < 3600) relTime = (diffSec / 60) + "m ago";
+                                        else if (diffSec < 86400) relTime = (diffSec / 3600) + "h ago";
+                                        else if (diffSec < 604800) relTime = (diffSec / 86400) + "d ago";
+                                        else relTime = log.getCreatedAt().toString().substring(0, 10);
+                                    }
+                        %>
+                            <div class="cu-tl-item">
+                                <div class="cu-tl-icon cu-tl-icon--<%= tlColor %>"><i data-lucide="<%= tlIcon %>"></i></div>
+                                <div class="cu-tl-body">
+                                    <p class="cu-tl-detail"><%= detail %></p>
+                                    <div class="cu-tl-meta">
+                                        <span class="cu-tl-actor"><i data-lucide="user"></i> <%= actor %></span>
+                                        <span class="cu-tl-time"><i data-lucide="clock"></i> <%= relTime %></span>
+                                    </div>
+                                </div>
+                            </div>
+                        <%
+                                }
+                            } else {
+                        %>
+                            <div class="cu-empty-state">
+                                <i data-lucide="activity"></i>
+                                <p>No activity recorded yet.</p>
+                            </div>
+                        <% } %>
                     </div>
+                </div>
+
+                <%-- TASKS TAB --%>
+                <div class="cu-tab-panel" id="tab-tasks">
                     <div class="cu-tasks">
                         <% if (tasks != null && !tasks.isEmpty()) {
+                            java.sql.Date todayCuSql = java.sql.Date.valueOf(java.time.LocalDate.now());
                             for (Task task : tasks) {
                                 String assignedName = task.getAssignedUserName() != null ? task.getAssignedUserName() : "Unassigned";
                                 boolean canEditTask = isAdmin || task.getAssignedUserId() == user.getId();
                                 boolean canDeleteTask = isAdmin || task.getCreatedBy() == user.getId();
+                                String taskStatus = task.getStatus() == null ? "Pending" : task.getStatus();
+                                boolean taskIsOverdue = !"Completed".equalsIgnoreCase(taskStatus) && task.getDueDate() != null && task.getDueDate().before(todayCuSql);
+                                String taskPriority = task.getPriority() != null ? task.getPriority() : "Medium";
+                                String taskPriorityClass = "High".equalsIgnoreCase(taskPriority) ? "priority-badge--high"
+                                        : "Low".equalsIgnoreCase(taskPriority) ? "priority-badge--low"
+                                        : "priority-badge--medium";
+                                String taskStatusBadge = taskIsOverdue ? "task-badge--overdue"
+                                        : "Completed".equalsIgnoreCase(taskStatus) ? "task-badge--completed"
+                                        : "In Progress".equalsIgnoreCase(taskStatus) ? "task-badge--in-progress"
+                                        : "task-badge--pending";
+                                String taskStatusLabel = taskIsOverdue ? "Overdue" : taskStatus;
                         %>
-                            <div class="cu-task-item">
-                                <strong><%= task.getTitle() %></strong>
-                                <span class="cu-item-time">Due: <%= task.getDueDate() %> | <%= assignedName %> | <%= task.getStatus() %></span>
+                            <div class="cu-task-item<%= taskIsOverdue ? " cu-task-item--overdue" : "" %>">
+                                <div class="cu-task-header">
+                                    <strong><%= task.getTitle() %></strong>
+                                    <div class="cu-task-badges">
+                                        <span class="priority-badge <%= taskPriorityClass %>"><%= taskPriority %></span>
+                                        <span class="task-badge <%= taskStatusBadge %>"><%= taskStatusLabel %></span>
+                                    </div>
+                                </div>
+                                <span class="cu-item-time">Due: <%= task.getDueDate() %> | <%= assignedName %></span>
+                                <% if (task.getDescription() != null && !task.getDescription().trim().isEmpty()) { %>
+                                    <p class="cu-task-desc"><%= task.getDescription() %></p>
+                                <% } %>
                                 <form method="POST" action="${pageContext.request.contextPath}/customers" style="margin-top:8px;">
                                     <input type="hidden" name="action" value="updateTaskStatus">
                                     <input type="hidden" name="taskId" value="<%= task.getId() %>">
@@ -498,9 +593,17 @@
                                                 <input type="hidden" name="action" value="updateTask">
                                                 <input type="hidden" name="taskId" value="<%= task.getId() %>">
                                                 <div class="cu-task-add-row">
-                                                    <input type="text" name="taskTitle" value="<%= task.getTitle() %>" required>
+                                                    <input type="text" name="taskTitle" value="<%= task.getTitle() %>" placeholder="Task title" required>
                                                 </div>
                                                 <div class="cu-task-add-row">
+                                                    <textarea name="taskDescription" placeholder="Description (optional)" rows="2"><%= task.getDescription() != null ? task.getDescription() : "" %></textarea>
+                                                </div>
+                                                <div class="cu-task-add-row">
+                                                    <select name="taskPriority" required>
+                                                        <option value="Low" <%= "Low".equalsIgnoreCase(taskPriority) ? "selected" : "" %>>Low</option>
+                                                        <option value="Medium" <%= "Medium".equalsIgnoreCase(taskPriority) ? "selected" : "" %>>Medium</option>
+                                                        <option value="High" <%= "High".equalsIgnoreCase(taskPriority) ? "selected" : "" %>>High</option>
+                                                    </select>
                                                     <input type="date" name="dueDate" value="<%= task.getDueDate() %>" required>
                                                     <select name="taskStatus" required>
                                                         <option value="Pending" <%= "Pending".equalsIgnoreCase(task.getStatus()) ? "selected" : "" %>>Pending</option>
@@ -542,6 +645,14 @@
                             <input type="text" name="taskTitle" placeholder="Task title" required>
                         </div>
                         <div class="cu-task-add-row">
+                            <textarea name="taskDescription" placeholder="Description (optional)" rows="2"></textarea>
+                        </div>
+                        <div class="cu-task-add-row">
+                            <select name="taskPriority" required>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="Low">Low</option>
+                                <option value="High">High</option>
+                            </select>
                             <input type="date" name="dueDate" required>
                             <select name="taskAssignedUserId" required>
                                 <% if (assignedUsers != null) {
@@ -552,7 +663,8 @@
                             <button type="submit">Create Task</button>
                         </div>
                     </form>
-                </div>
+                </div><%-- end cu-tab-panel tasks --%>
+
                 <% } else { %>
                 <div class="cu-detail-empty">No customer selected.</div>
                 <% } %>
@@ -672,5 +784,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+// Customer detail panel tab switching
+(function () {
+    var tabs = document.querySelectorAll('.cu-tab');
+    var panels = document.querySelectorAll('.cu-tab-panel');
+    tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            tabs.forEach(function (t) { t.classList.remove('active'); });
+            panels.forEach(function (p) { p.classList.remove('active'); });
+            tab.classList.add('active');
+            var target = document.getElementById('tab-' + tab.getAttribute('data-tab'));
+            if (target) target.classList.add('active');
+        });
+    });
+})();
 </script>
 

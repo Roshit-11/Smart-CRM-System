@@ -52,7 +52,11 @@
         @SuppressWarnings("unchecked")
         List<Task> myTasks = (List<Task>) request.getAttribute("myTasks");
         @SuppressWarnings("unchecked")
+        List<Task> upcomingTasks = (List<Task>) request.getAttribute("upcomingTasks");
+        @SuppressWarnings("unchecked")
         List<ActivityLog> recentActivities = (List<ActivityLog>) request.getAttribute("recentActivities");
+        Integer overdueTasksCountAttr = (Integer) request.getAttribute("overdueTasksCount");
+        int overdueTasksCount = overdueTasksCountAttr != null ? overdueTasksCountAttr : 0;
 
         int unreadNotifications = 0;
         try {
@@ -97,11 +101,17 @@
                     <h3><%= myTasksCount %></h3>
                     <span class="saas-card-hint">Assigned to you</span>
                 </article>
+                <article class="saas-card card-accent-red">
+                    <div class="saas-card-icon"><i data-lucide="alert-triangle"></i></div>
+                    <p class="saas-card-title">Overdue</p>
+                    <h3><%= overdueTasksCount %></h3>
+                    <span class="saas-card-hint">Tasks past due date</span>
+                </article>
             </section>
 
             <div class="saas-content-grid">
                 <section class="saas-panel">
-                    <h3>Tasks</h3>
+                    <h3>My Tasks</h3>
                     <% if (myTasks == null || myTasks.isEmpty()) { %>
                         <div class="empty-state">
                             <i data-lucide="clipboard-check"></i>
@@ -123,6 +133,10 @@
                                     : "task-badge--pending";
                             String badgeText = isOverdue ? "Overdue" : status;
                             String rowClass = isOverdue ? "task-row task-row--overdue" : "task-row";
+                            String priority = task.getPriority() != null ? task.getPriority() : "Medium";
+                            String priorityClass = "High".equalsIgnoreCase(priority) ? "priority-badge--high"
+                                    : "Low".equalsIgnoreCase(priority) ? "priority-badge--low"
+                                    : "priority-badge--medium";
                     %>
                         <div class="<%= rowClass %>">
                             <span class="task-dot <%= dotClass %>"></span>
@@ -130,7 +144,37 @@
                                 <p class="task-title"><%= task.getTitle() %></p>
                                 <span class="task-meta"><i data-lucide="calendar"></i> Due <%= task.getDueDate() %></span>
                             </div>
+                            <span class="priority-badge <%= priorityClass %>"><%= priority %></span>
                             <span class="task-badge <%= badgeClass %>"><%= badgeText %></span>
+                        </div>
+                    <% }} %>
+                </section>
+
+                <section class="saas-panel">
+                    <h3>Upcoming (7 days)</h3>
+                    <% if (upcomingTasks == null || upcomingTasks.isEmpty()) { %>
+                        <div class="empty-state">
+                            <i data-lucide="calendar-check"></i>
+                            <p class="empty-state-title">No upcoming tasks</p>
+                            <p class="empty-state-sub">Nothing due in the next 7 days.</p>
+                        </div>
+                    <% } else {
+                        for (Task task : upcomingTasks) {
+                            String status = task.getStatus() == null ? "Pending" : task.getStatus();
+                            String priority = task.getPriority() != null ? task.getPriority() : "Medium";
+                            String priorityClass = "High".equalsIgnoreCase(priority) ? "priority-badge--high"
+                                    : "Low".equalsIgnoreCase(priority) ? "priority-badge--low"
+                                    : "priority-badge--medium";
+                            String badgeClass = "In Progress".equalsIgnoreCase(status) ? "task-badge--in-progress" : "task-badge--pending";
+                    %>
+                        <div class="task-row">
+                            <span class="task-dot task-dot--pending"></span>
+                            <div class="task-body">
+                                <p class="task-title"><%= task.getTitle() %></p>
+                                <span class="task-meta"><i data-lucide="calendar"></i> Due <%= task.getDueDate() %></span>
+                            </div>
+                            <span class="priority-badge <%= priorityClass %>"><%= priority %></span>
+                            <span class="task-badge <%= badgeClass %>"><%= status %></span>
                         </div>
                     <% }} %>
                 </section>

@@ -2698,3 +2698,1488 @@ body.auth-modal-page {
     linear-gradient(rgba(7, 15, 35, 0.78), rgba(7, 15, 35, 0.82)),
     url("../images/background.jpg") center/cover no-repeat fixed !important;
 }
+
+/* ═══════════════════════════════════════════════════
+   PRIORITY BADGES
+═══════════════════════════════════════════════════ */
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.priority-badge--low {
+  background: rgba(100,116,139,.15);
+  color: #94a3b8;
+  border: 1px solid rgba(100,116,139,.25);
+}
+.priority-badge--medium {
+  background: rgba(245,158,11,.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245,158,11,.25);
+}
+.priority-badge--high {
+  background: rgba(239,68,68,.15);
+  color: #ef4444;
+  border: 1px solid rgba(239,68,68,.25);
+}
+
+/* ═══════════════════════════════════════════════════
+   TASK STATUS BADGES (dashboard home)
+═══════════════════════════════════════════════════ */
+.task-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.task-badge--pending   { background: rgba(100,116,139,.12); color: #94a3b8; }
+.task-badge--in-progress { background: rgba(59,130,246,.15); color: #60a5fa; }
+.task-badge--completed { background: rgba(34,197,94,.15); color: #4ade80; }
+.task-badge--overdue   { background: rgba(239,68,68,.15); color: #ef4444; }
+
+/* ═══════════════════════════════════════════════════
+   OVERDUE TASK ROW
+═══════════════════════════════════════════════════ */
+.task-row--overdue { border-left: 3px solid #ef4444; padding-left: 8px; border-radius: 4px; }
+.cu-task-item--overdue { border-left: 3px solid #ef4444 !important; }
+
+/* ═══════════════════════════════════════════════════
+   CUSTOMER PANEL — task header layout
+═══════════════════════════════════════════════════ */
+.cu-task-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cu-task-badges { display: flex; gap: 6px; align-items: center; }
+.cu-task-desc {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 4px 0 0;
+  line-height: 1.5;
+}
+.cu-task-add-group textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 6px;
+  color: #e2e8f0;
+  padding: 8px 10px;
+  font-size: 13px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+/* ═══════════════════════════════════════════════════
+   RED ACCENT STAT CARD
+═══════════════════════════════════════════════════ */
+.card-accent-red { border-top: 3px solid #ef4444; }
+.card-accent-red .saas-card-icon { color: #ef4444; }
+
+/* ═══════════════════════════════════════════════════
+   TASK ROW LAYOUT (ensure badges align)
+═══════════════════════════════════════════════════ */
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.task-row:last-child { border-bottom: none; }
+.task-body { flex: 1; min-width: 0; }
+
+/* ═══════════════════════════════════════════════════
+   CUSTOMER DETAIL PANEL — TABS
+═══════════════════════════════════════════════════ */
+.cu-details-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+}
+.cu-details-head-left {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.cu-details-head-left h3 {
+  margin: 0 0 2px 0;
+  font-size: 16px;
+}
+.cu-details-head-left .cu-meta {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.cu-tabs {
+  display: flex;
+  gap: 2px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  margin-bottom: 14px;
+  padding: 0;
+  background: transparent;
+  overflow-x: auto;
+}
+.cu-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: transparent !important;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--crm-text-muted, #94a3b8);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 150ms ease, border-color 150ms ease;
+  white-space: nowrap;
+  width: auto;
+  border-radius: 0;
+}
+.cu-tab:hover {
+  color: var(--crm-text, #e2e8f0);
+}
+.cu-tab.active {
+  color: var(--crm-primary, #6366f1);
+  border-bottom-color: var(--crm-primary, #6366f1);
+}
+.cu-tab i[data-lucide],
+.cu-tab svg {
+  width: 14px;
+  height: 14px;
+}
+.cu-tab-count {
+  display: inline-block;
+  background: rgba(99,102,241,.15);
+  color: var(--crm-primary, #6366f1);
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: 10px;
+  font-weight: 600;
+  margin-left: 4px;
+  font-style: normal;
+}
+
+.cu-tab-panel {
+  display: none;
+  animation: cuFadeIn 200ms ease;
+}
+.cu-tab-panel.active {
+  display: block;
+}
+@keyframes cuFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Light mode tab adjustments */
+:root[data-theme="light"] .cu-tabs,
+body:not([data-theme]) .cu-tabs {
+  border-bottom-color: rgba(15,23,42,.1);
+}
+:root[data-theme="light"] .cu-tab,
+body:not([data-theme]) .cu-tab {
+  color: #64748b;
+}
+:root[data-theme="light"] .cu-tab:hover,
+body:not([data-theme]) .cu-tab:hover {
+  color: #0f172a;
+}
+
+/* ═══════════════════════════════════════════════════
+   NOTES TAB — compose + note cards
+═══════════════════════════════════════════════════ */
+.cu-note-compose {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+.cu-note-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: transparent !important;
+  border: none !important;
+  resize: vertical;
+  color: var(--crm-text, #e2e8f0);
+  font-size: 14px;
+  font-family: inherit;
+  line-height: 1.5;
+  padding: 4px 0;
+  outline: none;
+}
+.cu-note-textarea::placeholder {
+  color: rgba(148,163,184,.6);
+}
+.cu-note-compose-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+.cu-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--crm-primary, #6366f1) !important;
+  color: #fff !important;
+  border: none;
+  border-radius: 7px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 150ms ease, transform 150ms ease;
+  width: auto;
+}
+.cu-btn-primary:hover {
+  background: #4f46e5 !important;
+  transform: translateY(-1px);
+}
+.cu-btn-primary i[data-lucide],
+.cu-btn-primary svg {
+  width: 14px;
+  height: 14px;
+}
+
+.cu-notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cu-note-card {
+  background: rgba(255,255,255,.025) !important;
+  border: 1px solid rgba(253,230,138,.15);
+  border-left: 3px solid #fbbf24;
+  border-radius: 8px;
+  padding: 12px 14px;
+  transition: border-color 150ms ease;
+}
+.cu-note-card:hover {
+  border-left-color: #f59e0b;
+}
+.cu-note-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.cu-note-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.cu-note-meta {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.cu-note-author {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--crm-text, #e2e8f0);
+}
+.cu-note-time {
+  font-size: 11px;
+  color: rgba(148,163,184,.7);
+}
+.cu-note-delete-form { margin: 0; }
+.cu-note-delete-btn {
+  background: transparent !important;
+  color: #94a3b8 !important;
+  border: none;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 150ms ease, background 150ms ease;
+}
+.cu-note-delete-btn:hover {
+  color: #ef4444 !important;
+  background: rgba(239,68,68,.1) !important;
+}
+.cu-note-delete-btn i[data-lucide],
+.cu-note-delete-btn svg {
+  width: 14px;
+  height: 14px;
+}
+.cu-note-body {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--crm-text, #e2e8f0);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Light mode note card */
+:root[data-theme="light"] .cu-note-card,
+body:not([data-theme]) .cu-note-card {
+  background: #fffbeb !important;
+  border-color: rgba(245,158,11,.25);
+  border-left-color: #f59e0b;
+}
+:root[data-theme="light"] .cu-note-author,
+:root[data-theme="light"] .cu-note-body,
+body:not([data-theme]) .cu-note-author,
+body:not([data-theme]) .cu-note-body {
+  color: #1e293b;
+}
+
+/* ═══════════════════════════════════════════════════
+   ACTIVITY TIMELINE
+═══════════════════════════════════════════════════ */
+.cu-timeline-list {
+  position: relative;
+  padding-left: 8px;
+}
+.cu-timeline-list::before {
+  content: "";
+  position: absolute;
+  left: 21px;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(99,102,241,.3), rgba(99,102,241,.05));
+}
+.cu-tl-item {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+}
+.cu-tl-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(99,102,241,.12);
+  color: #6366f1;
+  border: 2px solid var(--crm-bg, #0b1120);
+  position: relative;
+  z-index: 1;
+}
+.cu-tl-icon i[data-lucide],
+.cu-tl-icon svg {
+  width: 14px;
+  height: 14px;
+}
+.cu-tl-icon--green   { background: rgba(34,197,94,.15); color: #4ade80; }
+.cu-tl-icon--blue    { background: rgba(59,130,246,.15); color: #60a5fa; }
+.cu-tl-icon--red     { background: rgba(239,68,68,.15); color: #ef4444; }
+.cu-tl-icon--amber   { background: rgba(245,158,11,.15); color: #f59e0b; }
+.cu-tl-icon--purple  { background: rgba(168,85,247,.15); color: #c084fc; }
+.cu-tl-icon--indigo  { background: rgba(99,102,241,.15); color: #818cf8; }
+
+.cu-tl-body {
+  flex: 1;
+  min-width: 0;
+  padding-top: 2px;
+}
+.cu-tl-detail {
+  margin: 0 0 4px 0;
+  font-size: 13px;
+  color: var(--crm-text, #e2e8f0);
+  line-height: 1.5;
+}
+.cu-tl-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: rgba(148,163,184,.7);
+}
+.cu-tl-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.cu-tl-meta i[data-lucide],
+.cu-tl-meta svg {
+  width: 11px;
+  height: 11px;
+}
+
+/* Light mode timeline */
+:root[data-theme="light"] .cu-tl-icon,
+body:not([data-theme]) .cu-tl-icon {
+  border-color: #fff;
+}
+:root[data-theme="light"] .cu-tl-detail,
+body:not([data-theme]) .cu-tl-detail {
+  color: #1e293b;
+}
+
+/* ═══════════════════════════════════════════════════
+   EMPTY STATES (panel-level)
+═══════════════════════════════════════════════════ */
+.cu-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 16px;
+  color: rgba(148,163,184,.7);
+}
+.cu-empty-state i[data-lucide],
+.cu-empty-state svg {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+.cu-empty-state p {
+  margin: 0;
+  font-size: 13px;
+}
+
+/* ═══════════════════════════════════════════════════
+   CONTACT ADMIN — User-side form + history
+═══════════════════════════════════════════════════ */
+.ca-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 18px;
+  margin-top: 16px;
+}
+@media (max-width: 980px) {
+  .ca-grid { grid-template-columns: 1fr; }
+}
+
+.ca-form-card,
+.ca-history-card {
+  background: var(--crm-card-bg, rgba(255,255,255,.04));
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.ca-form-header {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.ca-form-header h3 {
+  margin: 0 0 2px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+.ca-form-header p {
+  margin: 0;
+  font-size: 12.5px;
+  color: rgba(148,163,184,.8);
+}
+.ca-form-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+  flex-shrink: 0;
+}
+.ca-form-icon--secondary {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+.ca-form-icon i[data-lucide],
+.ca-form-icon svg { width: 20px; height: 20px; }
+
+.ca-form { display: flex; flex-direction: column; gap: 14px; }
+.ca-field { display: flex; flex-direction: column; gap: 6px; }
+.ca-field label {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--crm-text, #e2e8f0);
+  letter-spacing: 0.2px;
+}
+.ca-field input,
+.ca-field select,
+.ca-field textarea {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  color: var(--crm-text, #e2e8f0);
+  padding: 10px 12px;
+  font-size: 13.5px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 150ms ease, background 150ms ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+.ca-field textarea { resize: vertical; line-height: 1.5; }
+.ca-field input:focus,
+.ca-field select:focus,
+.ca-field textarea:focus {
+  border-color: var(--crm-primary, #6366f1);
+  background: rgba(99,102,241,.05);
+}
+.ca-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 600px) { .ca-field-row { grid-template-columns: 1fr; } }
+.ca-hint { margin: 0; font-size: 11.5px; color: rgba(148,163,184,.6); }
+
+.ca-readonly {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(99,102,241,.08);
+  border: 1px solid rgba(99,102,241,.18);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 13px;
+  color: var(--crm-text, #e2e8f0);
+}
+.ca-readonly i[data-lucide],
+.ca-readonly svg { width: 14px; height: 14px; color: #6366f1; }
+
+.ca-form-actions { display: flex; justify-content: flex-end; padding-top: 6px; }
+.ca-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--crm-primary, #6366f1) !important;
+  color: #fff !important;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 150ms ease, transform 150ms ease;
+  width: auto;
+  box-shadow: 0 6px 18px rgba(99,102,241,.25);
+}
+.ca-btn-primary:hover {
+  background: #4f46e5 !important;
+  transform: translateY(-1px);
+}
+.ca-btn-primary i[data-lucide],
+.ca-btn-primary svg { width: 14px; height: 14px; }
+
+/* History list */
+.ca-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 720px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.ca-history-item {
+  background: rgba(255,255,255,.025);
+  border: 1px solid rgba(255,255,255,.08);
+  border-left: 3px solid var(--crm-primary, #6366f1);
+  border-radius: 8px;
+  padding: 12px 14px;
+  transition: border-color 150ms ease, transform 150ms ease;
+}
+.ca-history-item:hover { transform: translateX(2px); }
+.ca-history-item-head {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.ca-history-item h4 {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--crm-text, #e2e8f0);
+}
+.ca-history-desc {
+  margin: 0 0 8px 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: rgba(226,232,240,.75);
+  white-space: pre-wrap;
+}
+.ca-history-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: rgba(148,163,184,.7);
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,.04);
+}
+.ca-history-time { display: inline-flex; align-items: center; gap: 4px; }
+.ca-history-time i[data-lucide],
+.ca-history-time svg { width: 12px; height: 12px; }
+
+.ca-inline-form { margin: 0; }
+.ca-btn-icon {
+  background: transparent !important;
+  color: rgba(148,163,184,.6) !important;
+  border: none;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ca-btn-icon:hover {
+  color: #ef4444 !important;
+  background: rgba(239,68,68,.1) !important;
+}
+.ca-btn-icon i[data-lucide],
+.ca-btn-icon svg { width: 14px; height: 14px; }
+
+/* Type + status tags */
+.ca-type-tag {
+  background: rgba(99,102,241,.15);
+  color: #818cf8;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.ca-status-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.ca-status--open     { background: rgba(245,158,11,.15); color: #fbbf24; }
+.ca-status--progress { background: rgba(59,130,246,.15); color: #60a5fa; }
+.ca-status--resolved { background: rgba(34,197,94,.15); color: #4ade80; }
+.ca-status--closed   { background: rgba(148,163,184,.15); color: #94a3b8; }
+
+/* Admin response box (user side) */
+.ca-admin-response {
+  background: rgba(34,197,94,.08);
+  border: 1px solid rgba(34,197,94,.2);
+  border-left: 3px solid #4ade80;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin: 8px 0;
+}
+.ca-admin-response strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #4ade80;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.ca-admin-response strong i[data-lucide],
+.ca-admin-response strong svg { width: 12px; height: 12px; }
+.ca-admin-response p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--crm-text, #e2e8f0);
+  white-space: pre-wrap;
+}
+
+.ca-empty {
+  text-align: center;
+  padding: 36px 16px;
+  color: rgba(148,163,184,.6);
+}
+.ca-empty i[data-lucide],
+.ca-empty svg { width: 36px; height: 36px; margin-bottom: 8px; opacity: 0.5; }
+.ca-empty p { margin: 0; font-size: 13px; }
+
+/* ═══════════════════════════════════════════════════
+   ADMIN ISSUES — Filters + cards grid
+═══════════════════════════════════════════════════ */
+.ai-filters {
+  margin: 18px 0 14px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.ai-filter-form {
+  display: flex;
+  gap: 14px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.ai-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 180px;
+}
+.ai-filter-group label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  color: rgba(148,163,184,.8);
+  font-weight: 500;
+}
+.ai-filter-group label i[data-lucide],
+.ai-filter-group label svg { width: 12px; height: 12px; }
+.ai-filter-group select {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 7px;
+  color: var(--crm-text, #e2e8f0);
+  padding: 8px 10px;
+  font-size: 13px;
+  outline: none;
+}
+.ai-btn-apply,
+.ai-btn-clear {
+  padding: 8px 16px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+}
+.ai-btn-apply {
+  background: var(--crm-primary, #6366f1) !important;
+  color: #fff !important;
+}
+.ai-btn-apply:hover { background: #4f46e5 !important; }
+.ai-btn-clear {
+  background: transparent !important;
+  color: rgba(148,163,184,.8) !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+}
+.ai-btn-clear:hover {
+  color: #fff !important;
+  border-color: rgba(255,255,255,.2) !important;
+}
+
+/* Issue cards grid */
+.ai-issues-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+.ai-issue-card {
+  background: var(--crm-card-bg, rgba(255,255,255,.04));
+  border: 1px solid rgba(255,255,255,.08);
+  border-top: 3px solid var(--crm-primary, #6366f1);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.ai-issue-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.18);
+}
+.ai-issue-card--red    { border-top-color: #ef4444; }
+.ai-issue-card--blue   { border-top-color: #60a5fa; }
+.ai-issue-card--purple { border-top-color: #c084fc; }
+.ai-issue-card--amber  { border-top-color: #f59e0b; }
+.ai-issue-card--indigo { border-top-color: #818cf8; }
+
+.ai-issue-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.ai-issue-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  background: rgba(99,102,241,.15);
+  color: #818cf8;
+}
+.ai-issue-type i[data-lucide],
+.ai-issue-type svg { width: 12px; height: 12px; }
+.ai-issue-type--red    { background: rgba(239,68,68,.15); color: #f87171; }
+.ai-issue-type--blue   { background: rgba(59,130,246,.15); color: #60a5fa; }
+.ai-issue-type--purple { background: rgba(168,85,247,.15); color: #c084fc; }
+.ai-issue-type--amber  { background: rgba(245,158,11,.15); color: #fbbf24; }
+
+.ai-issue-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--crm-text, #e2e8f0);
+  line-height: 1.4;
+}
+.ai-issue-desc {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: rgba(226,232,240,.78);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: pre-wrap;
+}
+
+.ai-issue-sender {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: rgba(255,255,255,.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.05);
+}
+.ai-sender-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.ai-sender-info { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.ai-sender-info strong {
+  font-size: 12.5px;
+  color: var(--crm-text, #e2e8f0);
+  font-weight: 600;
+}
+.ai-sender-info span {
+  font-size: 11px;
+  color: rgba(148,163,184,.7);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ai-admin-response {
+  background: rgba(34,197,94,.08);
+  border: 1px solid rgba(34,197,94,.2);
+  border-radius: 7px;
+  padding: 8px 10px;
+}
+.ai-admin-response strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #4ade80;
+  font-size: 11.5px;
+  margin-bottom: 4px;
+}
+.ai-admin-response strong i[data-lucide],
+.ai-admin-response strong svg { width: 11px; height: 11px; }
+.ai-admin-response p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--crm-text, #e2e8f0);
+}
+
+.ai-issue-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  font-size: 11px;
+  color: rgba(148,163,184,.7);
+}
+.ai-issue-time { display: inline-flex; align-items: center; gap: 4px; }
+.ai-issue-time i[data-lucide],
+.ai-issue-time svg { width: 11px; height: 11px; }
+
+.ai-issue-manage { margin-top: 4px; }
+.ai-issue-manage summary {
+  cursor: pointer;
+  font-size: 12px;
+  color: rgba(148,163,184,.85);
+  padding: 6px 10px;
+  border-radius: 6px;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+  transition: background 150ms ease;
+}
+.ai-issue-manage summary:hover { background: rgba(99,102,241,.1); color: #fff; }
+.ai-issue-manage summary::-webkit-details-marker { display: none; }
+.ai-issue-manage summary i[data-lucide],
+.ai-issue-manage summary svg { width: 12px; height: 12px; }
+
+.ai-manage-form {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  background: rgba(0,0,0,.15);
+  border-radius: 7px;
+}
+.ai-manage-row { display: flex; flex-direction: column; gap: 4px; }
+.ai-manage-row label {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(148,163,184,.85);
+}
+.ai-manage-row select,
+.ai-manage-row textarea {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 6px;
+  color: var(--crm-text, #e2e8f0);
+  padding: 7px 10px;
+  font-size: 12.5px;
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+}
+.ai-manage-form button { align-self: flex-end; padding: 7px 14px; font-size: 12px; }
+
+.ai-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  background: rgba(255,255,255,.02);
+  border: 1px dashed rgba(255,255,255,.1);
+  border-radius: 12px;
+}
+.ai-empty i[data-lucide],
+.ai-empty svg { width: 48px; height: 48px; color: rgba(148,163,184,.5); margin-bottom: 10px; }
+.ai-empty h3 { margin: 0 0 4px 0; color: var(--crm-text, #e2e8f0); font-weight: 600; }
+.ai-empty p { margin: 0; color: rgba(148,163,184,.7); font-size: 13px; }
+
+/* Card accent variants used by admin issue stats */
+.card-accent-blue   { border-top: 3px solid #60a5fa; }
+.card-accent-blue   .saas-card-icon { color: #60a5fa; }
+.card-accent-green  { border-top: 3px solid #4ade80; }
+.card-accent-green  .saas-card-icon { color: #4ade80; }
+
+/* ═══════════════════════════════════════════════════
+   LIGHT MODE OVERRIDES
+═══════════════════════════════════════════════════ */
+:root[data-theme="light"] .ca-form-card,
+:root[data-theme="light"] .ca-history-card,
+:root[data-theme="light"] .ai-issue-card,
+:root[data-theme="light"] .ai-filters,
+body:not([data-theme]) .ca-form-card,
+body:not([data-theme]) .ca-history-card,
+body:not([data-theme]) .ai-issue-card,
+body:not([data-theme]) .ai-filters {
+  background: #fff;
+  border-color: #e2e8f0;
+}
+:root[data-theme="light"] .ca-history-item,
+:root[data-theme="light"] .ai-issue-sender,
+body:not([data-theme]) .ca-history-item,
+body:not([data-theme]) .ai-issue-sender {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+:root[data-theme="light"] .ca-history-item h4,
+:root[data-theme="light"] .ai-issue-title,
+:root[data-theme="light"] .ca-field label,
+:root[data-theme="light"] .ai-sender-info strong,
+:root[data-theme="light"] .ca-form-header h3,
+body:not([data-theme]) .ca-history-item h4,
+body:not([data-theme]) .ai-issue-title,
+body:not([data-theme]) .ca-field label,
+body:not([data-theme]) .ai-sender-info strong,
+body:not([data-theme]) .ca-form-header h3 {
+  color: #0f172a;
+}
+:root[data-theme="light"] .ca-history-desc,
+:root[data-theme="light"] .ai-issue-desc,
+body:not([data-theme]) .ca-history-desc,
+body:not([data-theme]) .ai-issue-desc {
+  color: #475569;
+}
+:root[data-theme="light"] .ca-field input,
+:root[data-theme="light"] .ca-field select,
+:root[data-theme="light"] .ca-field textarea,
+:root[data-theme="light"] .ai-filter-group select,
+body:not([data-theme]) .ca-field input,
+body:not([data-theme]) .ca-field select,
+body:not([data-theme]) .ca-field textarea,
+body:not([data-theme]) .ai-filter-group select {
+  background: #fff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+/* ═══════════════════════════════════════════════════
+   FIX: Contact Admin / Issue Reports — dark mode default
+   The previous "body:not([data-theme])" selectors were
+   matching dark mode (data-theme is on <html>, not body).
+   Force transparent + hairline borders for dark, scope
+   light-mode overrides strictly to data-theme="light".
+═══════════════════════════════════════════════════ */
+
+/* Reset dark-mode defaults so they win over the light fallback */
+.ca-form-card,
+.ca-history-card,
+.ai-issue-card,
+.ai-filters {
+  background: transparent !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  color: #e2e8f0;
+}
+.ai-issue-card {
+  border-top-width: 3px !important;
+  border-top-style: solid !important;
+}
+.ai-issue-card--red    { border-top-color: #ef4444 !important; }
+.ai-issue-card--blue   { border-top-color: #60a5fa !important; }
+.ai-issue-card--purple { border-top-color: #c084fc !important; }
+.ai-issue-card--amber  { border-top-color: #f59e0b !important; }
+.ai-issue-card--indigo { border-top-color: #818cf8 !important; }
+
+.ca-history-item,
+.ai-issue-sender {
+  background: transparent !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+}
+.ca-history-item {
+  border-left: 3px solid var(--crm-primary, #6366f1) !important;
+}
+
+/* All headings / labels / strong text white in dark mode */
+.ca-form-card h3,
+.ca-history-card h3,
+.ca-history-item h4,
+.ai-issue-title,
+.ai-sender-info strong,
+.ca-field label,
+.ca-form-header h3 {
+  color: #f1f5f9 !important;
+}
+
+/* Body / description copy: soft off-white */
+.ca-history-desc,
+.ai-issue-desc,
+.ca-form-header p,
+.ai-sender-info span,
+.ca-history-foot,
+.ai-issue-foot,
+.ca-history-time,
+.ai-issue-time,
+.ca-hint {
+  color: rgba(226,232,240,.72) !important;
+}
+
+/* Inputs: transparent with hairline border */
+.ca-field input,
+.ca-field select,
+.ca-field textarea,
+.ai-filter-group select,
+.ai-manage-row select,
+.ai-manage-row textarea {
+  background: rgba(255,255,255,.03) !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  color: #e2e8f0 !important;
+}
+.ca-field input::placeholder,
+.ca-field textarea::placeholder,
+.ai-manage-row textarea::placeholder {
+  color: rgba(148,163,184,.5);
+}
+
+/* Sender row inside issue card: subtle transparent panel */
+.ai-issue-sender {
+  background: rgba(255,255,255,.025) !important;
+}
+
+/* Stat cards on admin issues page — keep cohesive with rest of dark UI */
+.saas-card-grid .saas-card {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+/* LIGHT MODE — only apply when explicitly toggled */
+:root[data-theme="light"] .ca-form-card,
+:root[data-theme="light"] .ca-history-card,
+:root[data-theme="light"] .ai-issue-card,
+:root[data-theme="light"] .ai-filters {
+  background: #fff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a;
+}
+:root[data-theme="light"] .ca-history-item,
+:root[data-theme="light"] .ai-issue-sender {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+:root[data-theme="light"] .ca-form-card h3,
+:root[data-theme="light"] .ca-history-card h3,
+:root[data-theme="light"] .ca-history-item h4,
+:root[data-theme="light"] .ai-issue-title,
+:root[data-theme="light"] .ai-sender-info strong,
+:root[data-theme="light"] .ca-field label,
+:root[data-theme="light"] .ca-form-header h3 {
+  color: #0f172a !important;
+}
+:root[data-theme="light"] .ca-history-desc,
+:root[data-theme="light"] .ai-issue-desc,
+:root[data-theme="light"] .ca-form-header p,
+:root[data-theme="light"] .ai-sender-info span {
+  color: #475569 !important;
+}
+:root[data-theme="light"] .ca-field input,
+:root[data-theme="light"] .ca-field select,
+:root[data-theme="light"] .ca-field textarea,
+:root[data-theme="light"] .ai-filter-group select,
+:root[data-theme="light"] .ai-manage-row select,
+:root[data-theme="light"] .ai-manage-row textarea {
+  background: #fff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+/* ═══════════════════════════════════════════════════
+   CUSTOMER TABLE — dark mode hover + text fixes
+   Override the `tr:hover > td` rule from style.css that
+   was leaving cells white-ish in dark mode and washing
+   out the row text.
+═══════════════════════════════════════════════════ */
+
+/* Default cell text in dark mode — make all white-ish */
+:root[data-theme="dark"] .cu-table tbody td,
+:root[data-theme="dark"] .cu-table tbody td .cu-name,
+:root[data-theme="dark"] .cu-table tbody td .cu-email-cell,
+:root[data-theme="dark"] .cu-table tbody td .cu-phone-cell {
+  color: #e2e8f0 !important;
+}
+:root[data-theme="dark"] .cu-table tbody td .cu-name {
+  color: #f1f5f9 !important;
+}
+
+/* Kill the white hover; use a subtle indigo tint instead */
+:root[data-theme="dark"] .cu-table tbody tr:hover > td,
+:root[data-theme="dark"] .cu-table tbody tr:hover td {
+  background: rgba(99,102,241,.06) !important;
+  color: #f1f5f9 !important;
+}
+:root[data-theme="dark"] .cu-table tbody tr:hover .cu-name {
+  color: #c7d2fe !important;
+}
+:root[data-theme="dark"] .cu-table tbody tr:hover .cu-email-cell,
+:root[data-theme="dark"] .cu-table tbody tr:hover .cu-phone-cell {
+  color: #cbd5e1 !important;
+}
+
+/* Selected row — slightly stronger indigo, never white */
+:root[data-theme="dark"] tr.selected-row > td,
+:root[data-theme="dark"] tr.selected-row td,
+:root[data-theme="dark"] .cu-table tbody tr.selected-row:hover > td,
+:root[data-theme="dark"] .cu-table tbody tr.selected-row:hover td {
+  background: rgba(99,102,241,.14) !important;
+  color: #f1f5f9 !important;
+}
+:root[data-theme="dark"] tr.selected-row .cu-name {
+  color: #ffffff !important;
+}
+
+/* Header row */
+:root[data-theme="dark"] .cu-table thead th {
+  background: rgba(255,255,255,.02) !important;
+  color: #94a3b8 !important;
+  border-bottom: 1px solid rgba(255,255,255,.08) !important;
+}
+
+/* Cell border lines — hairline white instead of soft gray */
+:root[data-theme="dark"] .cu-table td {
+  border-top-color: rgba(255,255,255,.06) !important;
+}
+
+/* Avatar colors stay readable in dark */
+:root[data-theme="dark"] .cu-row-avatar {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #fff;
+}
+
+/* ═══════════════════════════════════════════════════
+   CUSTOMER PAGE — list-header titles (plain text, no pill)
+═══════════════════════════════════════════════════ */
+.cu-list-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: 0.2px;
+}
+.cu-list-meta {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(148,163,184,.85);
+  margin-left: 10px;
+  /* explicitly NOT pill-shaped */
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Light mode */
+:root[data-theme="light"] .cu-list-title { color: #0f172a; }
+:root[data-theme="light"] .cu-list-meta { color: #64748b; }
+
+/* ═══════════════════════════════════════════════════
+   LIGHT-MODE FINAL OVERRIDES — beat earlier !important
+   defaults so light mode keeps dark, readable text and
+   white cards (only dark mode shows white text).
+═══════════════════════════════════════════════════ */
+
+/* Cards: white background, slate border in light mode */
+:root[data-theme="light"] .ca-form-card,
+:root[data-theme="light"] .ca-history-card,
+:root[data-theme="light"] .ai-issue-card,
+:root[data-theme="light"] .ai-filters {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+:root[data-theme="light"] .ca-history-item,
+:root[data-theme="light"] .ai-issue-sender {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+:root[data-theme="light"] .ca-history-item {
+  border-left: 3px solid var(--crm-primary, #6366f1) !important;
+}
+
+/* Headings + labels: dark text */
+:root[data-theme="light"] .ca-form-card h3,
+:root[data-theme="light"] .ca-history-card h3,
+:root[data-theme="light"] .ca-history-item h4,
+:root[data-theme="light"] .ai-issue-title,
+:root[data-theme="light"] .ai-sender-info strong,
+:root[data-theme="light"] .ca-field label,
+:root[data-theme="light"] .ca-form-header h3,
+:root[data-theme="light"] .cu-list-title {
+  color: #0f172a !important;
+}
+
+/* Body / meta copy: slate */
+:root[data-theme="light"] .ca-history-desc,
+:root[data-theme="light"] .ai-issue-desc,
+:root[data-theme="light"] .ca-form-header p,
+:root[data-theme="light"] .ai-sender-info span,
+:root[data-theme="light"] .ca-history-foot,
+:root[data-theme="light"] .ai-issue-foot,
+:root[data-theme="light"] .ca-history-time,
+:root[data-theme="light"] .ai-issue-time,
+:root[data-theme="light"] .ca-hint,
+:root[data-theme="light"] .cu-list-meta {
+  color: #64748b !important;
+}
+
+/* Inputs: white bg, dark text in light mode */
+:root[data-theme="light"] .ca-field input,
+:root[data-theme="light"] .ca-field select,
+:root[data-theme="light"] .ca-field textarea,
+:root[data-theme="light"] .ai-filter-group select,
+:root[data-theme="light"] .ai-manage-row select,
+:root[data-theme="light"] .ai-manage-row textarea {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+:root[data-theme="light"] .ca-field input::placeholder,
+:root[data-theme="light"] .ca-field textarea::placeholder,
+:root[data-theme="light"] .ai-manage-row textarea::placeholder {
+  color: #94a3b8;
+}
+
+/* Stat-card grid on admin issues — white in light */
+:root[data-theme="light"] .saas-card-grid .saas-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+/* Customer table — light mode keeps white rows + dark text */
+:root[data-theme="light"] .cu-table tbody td,
+:root[data-theme="light"] .cu-table tbody td .cu-name,
+:root[data-theme="light"] .cu-table tbody td .cu-email-cell,
+:root[data-theme="light"] .cu-table tbody td .cu-phone-cell {
+  color: #334155 !important;
+}
+:root[data-theme="light"] .cu-table tbody td .cu-name {
+  color: #0f172a !important;
+}
+:root[data-theme="light"] .cu-table tbody tr:hover > td,
+:root[data-theme="light"] .cu-table tbody tr:hover td {
+  background: #f7f9fc !important;
+  color: #0f172a !important;
+}
+:root[data-theme="light"] .cu-table tbody tr:hover .cu-name {
+  color: #4f46e5 !important;
+}
+:root[data-theme="light"] tr.selected-row > td,
+:root[data-theme="light"] tr.selected-row td {
+  background: rgba(99,102,241,.08) !important;
+  color: #0f172a !important;
+}
+:root[data-theme="light"] .cu-table thead th {
+  background: #fafbfc !important;
+  color: #94a3b8 !important;
+  border-bottom: 2px solid #f1f5f9 !important;
+}
+
+/* ═══════════════════════════════════════════════════
+   FINAL FIX — light mode has NO data-theme attribute
+   (app.js calls removeAttribute on light). So target
+   light via :root:not([data-theme="dark"]).
+═══════════════════════════════════════════════════ */
+
+:root:not([data-theme="dark"]) .ca-form-card,
+:root:not([data-theme="dark"]) .ca-history-card,
+:root:not([data-theme="dark"]) .ai-issue-card,
+:root:not([data-theme="dark"]) .ai-filters {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+:root:not([data-theme="dark"]) .ca-history-item,
+:root:not([data-theme="dark"]) .ai-issue-sender {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+:root:not([data-theme="dark"]) .ca-history-item {
+  border-left: 3px solid var(--crm-primary, #6366f1) !important;
+}
+
+:root:not([data-theme="dark"]) .ca-form-card h3,
+:root:not([data-theme="dark"]) .ca-history-card h3,
+:root:not([data-theme="dark"]) .ca-history-item h4,
+:root:not([data-theme="dark"]) .ai-issue-title,
+:root:not([data-theme="dark"]) .ai-sender-info strong,
+:root:not([data-theme="dark"]) .ca-field label,
+:root:not([data-theme="dark"]) .ca-form-header h3,
+:root:not([data-theme="dark"]) .cu-list-title {
+  color: #0f172a !important;
+}
+
+:root:not([data-theme="dark"]) .ca-history-desc,
+:root:not([data-theme="dark"]) .ai-issue-desc,
+:root:not([data-theme="dark"]) .ca-form-header p,
+:root:not([data-theme="dark"]) .ai-sender-info span,
+:root:not([data-theme="dark"]) .ca-history-foot,
+:root:not([data-theme="dark"]) .ai-issue-foot,
+:root:not([data-theme="dark"]) .ca-history-time,
+:root:not([data-theme="dark"]) .ai-issue-time,
+:root:not([data-theme="dark"]) .ca-hint,
+:root:not([data-theme="dark"]) .cu-list-meta {
+  color: #64748b !important;
+}
+
+:root:not([data-theme="dark"]) .ca-field input,
+:root:not([data-theme="dark"]) .ca-field select,
+:root:not([data-theme="dark"]) .ca-field textarea,
+:root:not([data-theme="dark"]) .ai-filter-group select,
+:root:not([data-theme="dark"]) .ai-manage-row select,
+:root:not([data-theme="dark"]) .ai-manage-row textarea {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+:root:not([data-theme="dark"]) .ca-field input::placeholder,
+:root:not([data-theme="dark"]) .ca-field textarea::placeholder,
+:root:not([data-theme="dark"]) .ai-manage-row textarea::placeholder {
+  color: #94a3b8;
+}
+
+:root:not([data-theme="dark"]) .saas-card-grid .saas-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+/* Customer table — light mode */
+:root:not([data-theme="dark"]) .cu-table tbody td,
+:root:not([data-theme="dark"]) .cu-table tbody td .cu-name,
+:root:not([data-theme="dark"]) .cu-table tbody td .cu-email-cell,
+:root:not([data-theme="dark"]) .cu-table tbody td .cu-phone-cell {
+  color: #334155 !important;
+}
+:root:not([data-theme="dark"]) .cu-table tbody td .cu-name {
+  color: #0f172a !important;
+}
+:root:not([data-theme="dark"]) .cu-table tbody tr:hover > td,
+:root:not([data-theme="dark"]) .cu-table tbody tr:hover td {
+  background: #f7f9fc !important;
+  color: #0f172a !important;
+}
+:root:not([data-theme="dark"]) .cu-table tbody tr:hover .cu-name {
+  color: #4f46e5 !important;
+}
+:root:not([data-theme="dark"]) tr.selected-row > td,
+:root:not([data-theme="dark"]) tr.selected-row td {
+  background: rgba(99,102,241,.08) !important;
+  color: #0f172a !important;
+}
+:root:not([data-theme="dark"]) .cu-table thead th {
+  background: #fafbfc !important;
+  color: #94a3b8 !important;
+  border-bottom: 2px solid #f1f5f9 !important;
+}
+
+/* Admin response box — light mode (it was unreadable green-on-light too) */
+:root:not([data-theme="dark"]) .ca-admin-response,
+:root:not([data-theme="dark"]) .ai-admin-response {
+  background: #f0fdf4 !important;
+  border-color: #bbf7d0 !important;
+}
+:root:not([data-theme="dark"]) .ca-admin-response p,
+:root:not([data-theme="dark"]) .ai-admin-response p {
+  color: #14532d !important;
+}

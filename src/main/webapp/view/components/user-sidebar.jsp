@@ -35,6 +35,10 @@
             <span class="saas-nav-icon"><i data-lucide="bar-chart-2"></i></span>
             <span class="saas-nav-label">Reports</span>
         </a>
+        <a href="${pageContext.request.contextPath}/contact-admin" class="saas-nav-item<%= "contact-admin".equals(activeNav_usrSide) ? " active" : "" %>">
+            <span class="saas-nav-icon"><i data-lucide="life-buoy"></i></span>
+            <span class="saas-nav-label">Contact Admin</span>
+        </a>
         <a href="${pageContext.request.contextPath}/settings" class="saas-nav-item<%= "settings".equals(activeNav_usrSide) ? " active" : "" %>">
             <span class="saas-nav-icon"><i data-lucide="sliders-horizontal"></i></span>
             <span class="saas-nav-label">Settings</span>

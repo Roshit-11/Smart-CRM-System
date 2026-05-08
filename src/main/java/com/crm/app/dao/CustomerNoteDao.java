@@ -64,4 +64,24 @@ public class CustomerNoteDao {
 
         return notes;
     }
+
+    public boolean deleteNote(int noteId, int userId, String companyName) {
+        String sql = "DELETE n FROM customer_notes n "
+                + "JOIN customers c ON n.customer_id = c.id "
+                + "JOIN users u ON c.created_by = u.id "
+                + "WHERE n.id = ? AND n.user_id = ? AND u.company_name = ?";
+
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, noteId);
+            pstmt.setInt(2, userId);
+            pstmt.setString(3, companyName);
+            return pstmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -95,12 +95,12 @@ public class ActivityLogDao {
     }
 
     public List<ActivityLog> getRecentActivities(String companyName) {
-        String sql = "SELECT al.id, al.action, al.created_at, u.name AS user_name "
+        String sql = "SELECT al.id, al.action, al.details, al.customer_id, al.created_at, u.name AS user_name "
                 + "FROM activity_logs al "
                 + "JOIN users u ON al.user_id = u.id "
                 + "WHERE u.company_name = ? "
                 + "ORDER BY al.created_at DESC "
-                + "LIMIT 5";
+                + "LIMIT 10";
         List<ActivityLog> logs = new ArrayList<>();
 
         try (Connection conn = DBConfig.getConnection();
@@ -111,7 +111,10 @@ public class ActivityLogDao {
 
             while (rs.next()) {
                 ActivityLog log = new ActivityLog();
+                log.setId(rs.getInt("id"));
                 log.setAction(rs.getString("action"));
+                log.setDetails(rs.getString("details"));
+                log.setCustomerId(rs.getInt("customer_id"));
                 log.setCreatedAt(rs.getTimestamp("created_at"));
                 log.setUserName(rs.getString("user_name"));
                 logs.add(log);
